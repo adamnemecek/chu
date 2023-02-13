@@ -1,22 +1,21 @@
 use crate::prelude::*;
 
 pub struct Matrix<T: Copy + Default> {
-    rows: usize,
-    cols: usize,
+    shape: (usize, usize),
+
     data: Vec<T>,
 }
 
 impl<T: Copy + Default> Matrix<T> {
-    pub fn new(rows: usize, cols: usize) -> Self {
+    pub fn new(shape: (usize, usize)) -> Self {
         Self {
-            rows,
-            cols,
-            data: vec![T::default(); rows * cols],
+            shape,
+            data: vec![T::default(); shape.0 * shape.1],
         }
     }
 
     pub fn transpose(&self) -> Self {
-        let mut ret = Self::new(self.cols, self.rows);
+        let mut ret = Self::new((self.shape.1, self.shape.0));
         ret
     }
 }
@@ -24,6 +23,7 @@ impl<T: Copy + Default> Matrix<T> {
 impl<T: Copy + Default> std::ops::Index<(usize, usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, index: (usize, usize)) -> &Self::Output {
+        let idx = self.shape.0 * index.0 + index.1;
         unimplemented!()
     }
 }
