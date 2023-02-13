@@ -18,8 +18,16 @@ impl<T: Copy + Default> Matrix<T> {
         }
     }
 
+    pub fn fill(&mut self, f: impl Fn(usize, usize) -> T) {
+        for i in 0..self.shape.0 {
+            for j in 0..self.shape.1 {
+                self[(i, j)] = f(i, j);
+            }
+        }
+    }
+
     pub fn transpose(&self) -> Self {
-        let mut ret = Self::new((self.shape.1, self.shape.0));
+        let mut ret = Self::new((self.shape.0, self.shape.1));
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
                 ret[(j, i)] = self[(i, j)];
