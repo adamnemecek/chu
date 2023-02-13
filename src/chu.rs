@@ -37,10 +37,10 @@ impl<T: Copy + Default> Matrix<T> {
     }
 
     pub fn transpose(&self) -> Self {
-        let mut ret = Self::new((self.shape.0, self.shape.1));
+        let mut ret = Self::new((self.shape.1, self.shape.0));
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
-                ret[(j, i)] = self[(i, j)];
+                ret[(i, j)] = self[(j, i)];
             }
         }
         ret

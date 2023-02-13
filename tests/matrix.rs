@@ -11,5 +11,6 @@ fn test_matrix() {
 
     println!("{:?}", m.data);
     println!("{:?}", n.data);
-    // println!("{:?}", m.row(0));
+    println!("{:?}", m.row(0));
+    println!("{:?}", n.row(0));
 }
