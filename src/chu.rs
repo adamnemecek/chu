@@ -88,13 +88,33 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     }
 }
 
+enum Standardized {
+    yes,
+    no(Option<Box<Chu>>),
+}
+
 pub struct Chu {
     k: usize,
+    data: Matrix<usize>,
+    std: Standardized,
 }
 
 impl Chu {
-    pub fn new() -> Self {
+    pub fn new(k: usize, shape: (usize, usize), standardized: bool) -> Self {
+        let c = Self {
+            k,
+            data: Matrix::new(shape),
+            std: if standardized {
+                Standardized::yes
+            } else {
+                Standardized::no(None)
+            },
+        };
         unimplemented!()
+    }
+
+    pub fn shape(&self) -> (usize, usize) {
+        self.data.shape
     }
 
     //
@@ -106,6 +126,29 @@ impl Chu {
 
 impl Conformable for Chu {
     fn conform(ctx: Context) -> Self {
+        unimplemented!()
+    }
+}
+
+impl std::ops::Mul for Chu {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        let k = self.k.max(rhs.k);
+        let rows = self.shape().0 * rhs.shape().0;
+        let cols = self.shape().1 + rhs.shape().1;
+
+        let mut m = Matrix::<usize>::new((rows, cols));
+        unimplemented!()
+    }
+}
+
+impl Chu {
+    fn sequence(&self, other: &Self) -> Self {
+        unimplemented!()
+    }
+
+    fn implication(&self, other: Self) -> Self {
+        let k = self.k.max(other.k);
         unimplemented!()
     }
 }
