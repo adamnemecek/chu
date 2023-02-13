@@ -24,13 +24,14 @@ impl<T: Copy + Default> std::ops::Index<(usize, usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, index: (usize, usize)) -> &Self::Output {
         let idx = self.shape.0 * index.0 + index.1;
-        unimplemented!()
+        &self.data[idx]
     }
 }
 
 impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
     fn index_mut(&mut self, index: (usize, usize)) -> &mut Self::Output {
-        unimplemented!()
+        let idx = self.shape.0 * index.0 + index.1;
+        &mut self.data[idx]
     }
 }
 
