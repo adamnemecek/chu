@@ -6,7 +6,7 @@ use crate::prelude::*;
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
 
-    data: Vec<T>,
+    pub data: Vec<T>,
 }
 
 fn t<T>(a: (T, T)) -> (T, T) {
@@ -24,14 +24,16 @@ impl<T: Copy + Default> Matrix<T> {
     pub fn fill(&mut self, f: impl Fn((usize, usize)) -> T) {
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
-                self[(i, j)] = f((i, j));
+                let r = f((i, j));
+                // println!("{:?} = {:?}", (i, j), r);
+                self[(i, j)] = r;
             }
         }
     }
 
     pub fn row(&self, row: usize) -> &[T] {
-        let start = row * self.shape.0;
-        &self.data[start..(start + self.shape.0)]
+        let start = row * self.shape.1;
+        &self.data[start..(start + self.shape.1)]
     }
 
     pub fn transpose(&self) -> Self {
@@ -43,20 +45,23 @@ impl<T: Copy + Default> Matrix<T> {
         }
         ret
     }
+
+    fn offset(&self, index: (usize, usize)) -> usize {
+        self.shape.0 * index.0 + index.1
+    }
 }
 
 impl<T: Copy + Default> std::ops::Index<(usize, usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, index: (usize, usize)) -> &Self::Output {
-        let idx = self.shape.0 * index.0 + index.1;
-        &self.data[idx]
+        &self.data[self.offset(index)]
     }
 }
 
 impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
     fn index_mut(&mut self, index: (usize, usize)) -> &mut Self::Output {
-        let idx = self.shape.0 * index.0 + index.1;
-        &mut self.data[idx]
+        let o = self.offset(index);
+        &mut self.data[o]
     }
 }
 
@@ -68,6 +73,7 @@ impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
 
 impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "")?;
         for row in 0..self.shape.0 {
             writeln!(f, "{:?}", self.row(row))?;
         }
