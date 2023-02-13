@@ -1,16 +1,14 @@
 use crate::prelude::*;
 
 struct Matrix<T: Copy + Default> {
-    k: usize
     r: usize,
     c: usize,
     data: Vec<T>,
 }
 
 impl<T: Copy + Default> Matrix<T> {
-    fn new(k: usize ,rows: usize, cols: usize) -> Self {
+    fn new(rows: usize, cols: usize) -> Self {
         Self {
-            k,
             r: rows,
             c: cols,
             data: vec![T::default(); rows * cols],
@@ -23,7 +21,14 @@ pub struct Chu {
 }
 
 impl Chu {
+    fn new() -> Self {
+        unimplemented!()
+    }
+
     //
+    fn dual(&self) -> Self {
+        unimplemented!()
+    }
 }
 
 impl Conformable for Chu {
