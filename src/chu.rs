@@ -1,5 +1,8 @@
+use std::fmt::Debug;
+
 use crate::prelude::*;
 
+#[derive(PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
 
@@ -18,12 +21,17 @@ impl<T: Copy + Default> Matrix<T> {
         }
     }
 
-    pub fn fill(&mut self, f: impl Fn(usize, usize) -> T) {
+    pub fn fill(&mut self, f: impl Fn((usize, usize)) -> T) {
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
-                self[(i, j)] = f(i, j);
+                self[(i, j)] = f((i, j));
             }
         }
+    }
+
+    pub fn row(&self, row: usize) -> &[T] {
+        let start = row * self.shape.0;
+        &self.data[start..(start + self.shape.0)]
     }
 
     pub fn transpose(&self) -> Self {
@@ -52,9 +60,20 @@ impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
     }
 }
 
-impl<T: Copy + Default + PartialEq> PartialEq for Matrix<T> {
-    fn eq(&self, other: &Self) -> bool {
-        true
+// impl<T: Copy + Default + PartialEq> PartialEq for Matrix<T> {
+//     fn eq(&self, other: &Self) -> bool {
+//         true
+//     }
+// }
+
+impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for row in 0..self.shape.0 {
+            let r = self.row(row);
+
+            write!(f, "{:?}", r)?;
+        }
+        Ok(())
     }
 }
 
