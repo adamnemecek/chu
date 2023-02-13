@@ -9,8 +9,9 @@ fn test_matrix() {
     // dbg!(m);
     let n = m.transpose();
 
-    println!("{:?}", m.data);
-    println!("{:?}", n.data);
-    println!("{:?}", m.row(0));
-    println!("{:?}", n.row(0));
+    // println!("{:?}", m.row_range(1));
+    println!("{:?}", m);
+    println!("{:?}", n);
+    // println!("{:?}", m.row(0));
+    // println!("{:?}", n.row(0));
 }

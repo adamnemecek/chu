@@ -30,10 +30,17 @@ impl<T: Copy + Default> Matrix<T> {
             }
         }
     }
+    pub fn shape(&self) -> (usize, usize) {
+        self.shape
+    }
+
+    pub fn row_range(&self, row: usize) -> std::ops::Range<usize> {
+        let start = row * self.shape.1;
+        start..(start + self.shape.1)
+    }
 
     pub fn row(&self, row: usize) -> &[T] {
-        let start = row * self.shape.1;
-        &self.data[start..(start + self.shape.1)]
+        &self.data[self.row_range(row)]
     }
 
     pub fn transpose(&self) -> Self {
