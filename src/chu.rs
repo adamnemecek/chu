@@ -1,18 +1,22 @@
 use crate::prelude::*;
 
-struct Matrix<T: Copy + Default> {
+pub struct Matrix<T: Copy + Default> {
     r: usize,
     c: usize,
     data: Vec<T>,
 }
 
 impl<T: Copy + Default> Matrix<T> {
-    fn new(rows: usize, cols: usize) -> Self {
+    pub fn new(rows: usize, cols: usize) -> Self {
         Self {
             r: rows,
             c: cols,
             data: vec![T::default(); rows * cols],
         }
+    }
+
+    pub fn transpose(&self) -> Self {
+        unimplemented!()
     }
 }
 
@@ -21,12 +25,12 @@ pub struct Chu {
 }
 
 impl Chu {
-    fn new() -> Self {
+    pub fn new() -> Self {
         unimplemented!()
     }
 
     //
-    fn dual(&self) -> Self {
+    pub fn dual(&self) -> Self {
         unimplemented!()
     }
 }
