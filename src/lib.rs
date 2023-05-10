@@ -16,10 +16,38 @@ mod link;
 mod matrix_generator;
 mod node;
 mod parse_space_exception;
-pub mod prelude;
 mod program;
 mod script_panel;
 mod statement;
 mod syntax_exception;
 mod tree;
 mod unary_operator;
+
+pub mod prelude {
+    pub use crate::{
+        binary_operator::*,
+        calc::*,
+        chu::*,
+        chu_edit::*,
+        chu_source::*,
+        chu_target::*,
+        chu_view::*,
+        conformable::*,
+        context::*,
+        executable::*,
+        execution_exception::*,
+        expression::*,
+        gui::*,
+        layout::*,
+        link::*,
+        matrix_generator::*,
+        node::*,
+        parse_space_exception::*,
+        program::*,
+        script_panel::*,
+        statement::*,
+        syntax_exception::*,
+        tree::*,
+        unary_operator::*,
+    };
+}

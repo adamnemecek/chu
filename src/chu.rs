@@ -88,15 +88,15 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     }
 }
 
-enum Standardized {
-    yes,
-    no(Option<Box<Chu>>),
-}
+// enum Standardized {
+//     yes,
+//     no(Option<Box<Chu>>),
+// }
 
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
-    std: Standardized,
+    std: Option<Box<Self>>,
 }
 
 impl Chu {
@@ -105,9 +105,10 @@ impl Chu {
             k,
             data: Matrix::new(shape),
             std: if standardized {
-                Standardized::yes
+                None
             } else {
-                Standardized::no(None)
+                // Some(None)
+                unimplemented!()
             },
         };
         unimplemented!()
