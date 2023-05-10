@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+// use std::fmt::Debug;
 
 use crate::prelude::*;
 
@@ -25,6 +25,14 @@ impl Chu {
                 unimplemented!()
             },
         };
+        unimplemented!()
+    }
+
+    pub fn new_with_size() -> Self {
+        unimplemented!()
+    }
+
+    pub fn row_tree(&self) {
         unimplemented!()
     }
 
