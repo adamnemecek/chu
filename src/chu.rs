@@ -36,6 +36,10 @@ impl Chu {
         unimplemented!()
     }
 
+    pub fn col_tree(&self) {
+        unimplemented!()
+    }
+
     pub fn shape(&self) -> (usize, usize) {
         self.data.shape()
     }

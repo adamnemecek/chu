@@ -23,7 +23,6 @@ impl<T: Copy + Default> Matrix<T> {
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
                 let r = f((i, j));
-                // println!("{:?} = {:?}", (i, j), r);
                 self[(i, j)] = r;
             }
         }
@@ -84,4 +83,10 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
         }
         Ok(())
     }
+}
+
+#[test]
+mod tests {
+
+    // fn test_
 }
