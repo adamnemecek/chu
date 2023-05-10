@@ -8,6 +8,10 @@ pub struct Tree {
 }
 
 impl Tree {
+    pub fn new(arity: usize, lenght: usize) -> Self {
+        unimplemented!()
+    }
+
     pub fn arity(&self) -> usize {
         unimplemented!()
     }
@@ -24,7 +28,7 @@ impl Tree {
         unimplemented!()
     }
 
-    pub fn add_line(&self) {
+    pub fn add_line(&self, line: &[usize], index: usize) -> Link {
         unimplemented!()
     }
 }
