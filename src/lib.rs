@@ -13,6 +13,7 @@ mod expression;
 mod gui;
 mod layout;
 mod link;
+mod matrix;
 mod matrix_generator;
 mod node;
 mod parse_space_exception;
@@ -40,6 +41,7 @@ pub mod prelude {
         gui::*,
         layout::*,
         link::*,
+        matrix::*,
         matrix_generator::*,
         node::*,
         parse_space_exception::*,
