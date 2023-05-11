@@ -1,10 +1,12 @@
 use crate::prelude::*;
-/* Generates all matrixes whose rows and columns are taken
- * from the prefix trees passed at construction time.
- *
- * After construction, each successful call to next
- * produces a representation of a new matrix.
- */
+//
+// Generates all matrixes whose rows and columns are taken
+// from the prefix trees passed at construction time.
+//
+// After construction, each successful call to next
+// produces a representation of a new matrix.
+//
+
 pub struct MatrixGenerator {
     // prefix tree of rows
     row_tree: Tree,
@@ -81,17 +83,15 @@ impl MatrixGenerator {
     // possible rows and columns into rowLinks, colLinks,
     // then return true.
     pub fn next(&mut self) -> bool {
-        // unimplemented!()
-
         // Loop Invariants:
         // The prefixes represented by rowNodes and colNodes
         //   cover the same set of cells and match in all values.
         // This set of cells is always the interval before some cell
         //   in the following "herringbone" order:
-        //      1  2  3  4
-        //     5   9 10 11
-        //     6 12  15 16
-        //     7 13 17  19
+        //     1  2  3  4
+        //     5  9 10 11
+        //     6 12 15 16
+        //     7 13 17 19
         //     8 14 18 20
 
         if self.done {
