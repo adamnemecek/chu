@@ -39,8 +39,8 @@ pub struct MatrixGenerator {
     // to lists of indexes of lines that form the matrix.)
     // After a successful call to next(), the caller
     // can examine these arrays to extract the matrix.
-    row_links: Vec<Link>,
-    col_links: Vec<Link>,
+    row_links: Vec<Option<Link>>,
+    col_links: Vec<Option<Link>>,
 }
 
 impl MatrixGenerator {
@@ -49,6 +49,10 @@ impl MatrixGenerator {
     pub fn new(row_tree: Tree, col_tree: Tree) -> Self {
         let rows = col_tree.len();
         let cols = row_tree.len();
+
+        // let row_nodes =
+        let row_links = vec![None; rows];
+        let col_links = vec![None; cols];
 
         Self {
             rows,
@@ -63,8 +67,8 @@ impl MatrixGenerator {
             current_col: 0,
             current_branch: 0,
             done: false,
-            row_links: vec![],
-            col_links: vec![],
+            row_links,
+            col_links,
         }
     }
 
@@ -130,11 +134,11 @@ impl MatrixGenerator {
         // Thus we have a matrix to record.
         for r in 0..self.rows {
             //
-            self.row_links[r] = self.row_nodes[r].link().clone();
+            self.row_links[r] = Some(self.row_nodes[r].link().clone());
         }
         for c in 0..self.cols {
             //
-            self.col_links[c] = self.col_nodes[c].link().clone();
+            self.col_links[c] = Some(self.col_nodes[c].link().clone());
         }
 
         // move search one step beyond this morphism
