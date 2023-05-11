@@ -50,7 +50,13 @@ impl Tree {
         unimplemented!()
     }
 
-    pub fn add_line(&self, line: &[usize], index: usize) -> Link {
+    // addLine: Inserts the given line at the given index.
+    // Returns a linked list of the indexes of all other
+    // lines which match the new line.
+    pub fn add_line(&self, line: &[usize], index: usize) -> Option<Link> {
+        if line.len() != self.len {
+            return None;
+        }
         unimplemented!()
     }
 }

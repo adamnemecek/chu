@@ -38,4 +38,12 @@ impl Node {
     pub fn branch(&self) -> usize {
         self.branch
     }
+
+    pub fn add(&self, datum: usize) {
+        unimplemented!()
+    }
+
+    pub fn grow(&self, branch: usize, arity: usize) {
+        //
+    }
 }
