@@ -45,13 +45,16 @@ impl MatrixGenerator {
     //
 
     pub fn new(row_tree: Tree, col_tree: Tree) -> Self {
+        let rows = col_tree.len();
+        let cols = row_tree.len();
+
         Self {
-            row_tree: Tree::new(0, 0),
-            col_tree: Tree::new(0, 0),
-            // shape: (0, 0),
-            rows: 0,
-            cols: 0,
-            k: 0,
+            rows,
+            cols,
+            k: row_tree.arity(),
+            row_tree,
+            col_tree,
+
             row_nodes: vec![],
             col_nodes: vec![],
             current_row: 0,
