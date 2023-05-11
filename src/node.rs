@@ -23,11 +23,11 @@ impl Node {
         }
     }
 
-    pub fn child(&self, branch: usize) -> Self {
+    pub fn child(&self, branch: usize) -> NodeRef {
         unimplemented!()
     }
 
-    pub fn parent(&self) -> Node {
+    pub fn parent(&self) -> NodeRef {
         unimplemented!()
     }
 

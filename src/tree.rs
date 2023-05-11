@@ -33,12 +33,11 @@ impl Tree {
             return None;
         }
 
-        let mut cur = &self.root;
+        let mut cur = self.root.clone();
 
         for e in line {
             if let Some(v) = &cur {
-                //
-                // cur = Some(v.child(e));
+                cur = v.child(*e).clone().into();
             } else {
                 return None;
             }
