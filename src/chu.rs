@@ -58,9 +58,31 @@ impl Chu {
 
     //
     pub fn dual(&self) -> Self {
-        // Self::new()
+        Self::new(self.k, self.data.transpose(), self.std.is_none())
+    }
+
+    fn query2() -> Self {
         unimplemented!()
-        // Self::new(k, shape, standardized)
+    }
+
+    pub fn query(&self) -> Self {
+        if self.k == 2 {
+            return Self::query2();
+        }
+
+        unimplemented!()
+    }
+
+    pub fn seq(a: Self, b: Self) -> Self {
+        let k = a.k.max(b.k);
+
+        let class_a = a.classify_cols();
+        let class_b = b.classify_cols();
+        unimplemented!()
+    }
+
+    pub fn classify_cols(&self) {
+        unimplemented!()
     }
 }
 
