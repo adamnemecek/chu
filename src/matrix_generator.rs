@@ -127,20 +127,50 @@ impl MatrixGenerator {
         // Thus we have a matrix to record.
         // for(int r=0;r<nrows;r++)
         //   rowLinks[r] = rowNodes[r].link();
+        for r in 0..self.rows {
+            //
+            self.row_links[r] = self.row_nodes[r].link().clone();
+        }
         // for(int c=0;c<ncols;c++)
         //   colLinks[c] = colNodes[c].link();
+        for c in 0..self.cols {
+            //
+            self.col_links[c] = self.col_nodes[c].link().clone();
+        }
 
         // move search one step beyond this morphism
         // then return true to indicate we have a morphism
         self.backward();
-        return true;
+        true
     }
 
-    pub fn backward(&self) -> bool {
+    pub fn backward(&mut self) -> bool {
+        if self.current_row == 0 && self.current_col == 0 {
+            //
+            self.done = true;
+            return false;
+        }
+
+        if self.current_row <= self.current_col {
+            //
+            self.current_col -= 1;
+
+            if self.current_row == self.current_col + 1 {
+                self.current_row = self.rows - 1;
+            }
+        } else {
+            //
+            self.current_row -= 1;
+
+            if self.current_row == self.current_col {
+                self.current_col = self.cols - 1;
+            }
+        }
+
         unimplemented!()
     }
 
-    pub fn forward(&self) -> bool {
+    pub fn forward(&mut self) -> bool {
         unimplemented!()
     }
 }
