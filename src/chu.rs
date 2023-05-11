@@ -14,10 +14,10 @@ pub struct Chu {
 }
 
 impl Chu {
-    pub fn new(k: usize, shape: (usize, usize), standardized: bool) -> Self {
-        let c = Self {
+    pub fn new(k: usize, data: Matrix<usize>, standardized: bool) -> Self {
+        let self_ = Self {
             k,
-            data: Matrix::new(shape),
+            data,
             std: if standardized {
                 None
             } else {
@@ -25,19 +25,30 @@ impl Chu {
                 unimplemented!()
             },
         };
+        self_
+    }
+
+    pub fn new_with_size(size: usize) -> Self {
         unimplemented!()
     }
 
-    pub fn new_with_size() -> Self {
-        unimplemented!()
+    pub fn rows(&self) -> usize {
+        self.shape().0
     }
 
-    pub fn row_tree(&self) {
-        // Tree
-        unimplemented!()
+    pub fn cols(&self) -> usize {
+        self.shape().1
     }
 
-    pub fn col_tree(&self) {
+    pub fn row_tree(&self) -> Tree {
+        let mut t = Tree::new(self.k, self.shape().1);
+        for i in 0..self.rows() {
+            //
+        }
+        t
+    }
+
+    pub fn col_tree(&self) -> Tree {
         unimplemented!()
     }
 
@@ -49,6 +60,7 @@ impl Chu {
     pub fn dual(&self) -> Self {
         // Self::new()
         unimplemented!()
+        // Self::new(k, shape, standardized)
     }
 }
 

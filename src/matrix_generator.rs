@@ -46,7 +46,7 @@ impl MatrixGenerator {
     }
 
     pub fn shape(&self) -> (usize, usize) {
-        unimplemented!()
+        self.shape
     }
 
     pub fn k(&self) -> usize {
@@ -63,5 +63,13 @@ impl MatrixGenerator {
 
     pub fn forward(&self) -> bool {
         unimplemented!()
+    }
+}
+
+// #[test]
+mod tests {
+    #[test]
+    fn testa() {
+        //
     }
 }
