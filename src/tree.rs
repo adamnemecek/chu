@@ -1,5 +1,8 @@
 use crate::prelude::*;
 
+// A tree is used to store a collection of equal-length "lines"
+// The lines are sequences of integers in the range 0..arity-1
+
 pub struct Tree {
     //
     arity: usize,
@@ -17,7 +20,7 @@ impl Tree {
     }
 
     pub fn arity(&self) -> usize {
-        unimplemented!()
+        self.arity
     }
 
     pub fn len(&self) -> usize {
@@ -38,12 +41,9 @@ impl Tree {
 
         let mut cur = self.root.clone();
 
-        for e in line {
-            if let Some(v) = &cur {
-                cur = v.child(*e).clone().into();
-            } else {
-                return None;
-            }
+        for l in line {
+            let Some(v) = &cur else { return None; };
+            cur = v.child(*l).clone().into();
         }
 
         // cur.map(|x| x.link())

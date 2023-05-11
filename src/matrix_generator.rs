@@ -6,7 +6,7 @@ use crate::prelude::*;
 // After construction, each successful call to next
 // produces a representation of a new matrix.
 //
-
+// #[derive(Debug)]
 pub struct MatrixGenerator {
     // prefix tree of rows
     row_tree: Tree,
@@ -69,13 +69,13 @@ impl MatrixGenerator {
         }
     }
 
-    pub fn shape(&self) -> (usize, usize) {
-        // self.shape
-        unimplemented!()
-    }
+    // pub fn shape(&self) -> (usize, usize) {
+    //     // self.shape
+    //     unimplemented!()
+    // }
 
     pub fn k(&self) -> usize {
-        unimplemented!()
+        self.k
     }
 
     // next: Try to find the next morphism
