@@ -57,6 +57,13 @@ impl Tree {
         if line.len() != self.len {
             return None;
         }
+
+        let mut current = &self.root;
+
+        for i in line {
+            //
+        }
+
         unimplemented!()
     }
 }

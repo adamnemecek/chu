@@ -42,7 +42,20 @@ impl MatrixGenerator {
     //
 
     pub fn new(row_tree: Tree, col_tree: Tree) -> Self {
-        unimplemented!()
+        Self {
+            row_tree: Tree::new(0, 0),
+            col_tree: Tree::new(0, 0),
+            shape: (0, 0),
+            k: 0,
+            row_nodes: vec![],
+            col_nodes: vec![],
+            current_row: 0,
+            current_col: 0,
+            current_branch: 0,
+            done: false,
+            row_links: vec![],
+            col_links: vec![],
+        }
     }
 
     pub fn shape(&self) -> (usize, usize) {

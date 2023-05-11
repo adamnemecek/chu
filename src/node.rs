@@ -43,7 +43,8 @@ impl Node {
         unimplemented!()
     }
 
-    pub fn grow(&self, branch: usize, arity: usize) {
+    pub fn grow(&self, branch: usize, arity: usize) -> NodeRef {
         //
+        unimplemented!()
     }
 }
