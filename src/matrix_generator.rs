@@ -116,7 +116,7 @@ impl MatrixGenerator {
                 }
 
                 // If we succeed in going forward, then we re-test bounds.
-                // Otherwise we try another value for currentBranch
+                // Otherwise we try another value for current_branch
                 let success = self.forward();
                 if success {
                     continue 'outer;
@@ -150,23 +150,36 @@ impl MatrixGenerator {
             return false;
         }
 
+        // First step currentRow, currentCol backward
         if self.current_row <= self.current_col {
-            //
+            // Shrink a row leftwards
             self.current_col -= 1;
+
+            // If the row is entirely empty,
+            //  then go to the end of the previous column.
 
             if self.current_row == self.current_col + 1 {
                 self.current_row = self.rows - 1;
             }
         } else {
-            //
+            // Shrink a column upwards
             self.current_row -= 1;
+
+            // If the column is entirely empty,
+            //  then go to the end of the previous row.
 
             if self.current_row == self.current_col {
                 self.current_col = self.cols - 1;
             }
         }
 
-        unimplemented!()
+        // Second, restore currentBranch and the prefix trees
+        self.current_branch = self.row_nodes[self.current_row].branch();
+        self.current_branch += 1;
+        self.row_nodes[self.current_row] = self.row_nodes[self.current_row].parent();
+        self.col_nodes[self.current_col] = self.col_nodes[self.current_col].parent();
+
+        true
     }
 
     pub fn forward(&mut self) -> bool {
@@ -177,12 +190,12 @@ impl MatrixGenerator {
         // If it doesn't work, then report failure
         // if (rn == null || cn == null) return false;
 
-        // First update currentBranch and the prefix trees
+        // First update current_branch and the prefix trees
         self.row_nodes[self.current_row] = rn;
         self.col_nodes[self.current_col] = cn;
         self.current_branch = 0;
 
-        // Second, step currentRow, currentCol forward
+        // Second, step current_row, current_col forward
         if self.current_row <= self.current_col {
             self.current_col += 1; // Grow a row rightward
 
