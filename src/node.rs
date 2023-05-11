@@ -23,7 +23,7 @@ impl Node {
         }
     }
 
-    pub fn child(&self, branch: usize) -> NodeRef {
+    pub fn child(&self, branch: usize) -> Option<NodeRef> {
         unimplemented!()
     }
 

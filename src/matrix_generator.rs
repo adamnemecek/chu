@@ -20,8 +20,8 @@ pub struct MatrixGenerator {
     // of overlapping partial rows and columns.  The two arrays
     // below represent that region by locating the Node for
     // each partial row and column.
-    row_nodes: Vec<Node>,
-    col_nodes: Vec<Node>,
+    row_nodes: Vec<NodeRef>,
+    col_nodes: Vec<NodeRef>,
 
     // more search variables:  current(Row/Col/Branch)
     // these variables give the cell we are trying to fill,
@@ -125,14 +125,10 @@ impl MatrixGenerator {
 
         // If we get here, the search went out of bounds.
         // Thus we have a matrix to record.
-        // for(int r=0;r<nrows;r++)
-        //   rowLinks[r] = rowNodes[r].link();
         for r in 0..self.rows {
             //
             self.row_links[r] = self.row_nodes[r].link().clone();
         }
-        // for(int c=0;c<ncols;c++)
-        //   colLinks[c] = colNodes[c].link();
         for c in 0..self.cols {
             //
             self.col_links[c] = self.col_nodes[c].link().clone();
@@ -171,7 +167,40 @@ impl MatrixGenerator {
     }
 
     pub fn forward(&mut self) -> bool {
-        unimplemented!()
+        // Try the current value of branch in the current cell
+        let Some(rn) = self.row_nodes[self.current_row].child(self.current_branch) else { return false};
+        let Some(cn) = self.col_nodes[self.current_col].child(self.current_branch) else { return false};
+
+        // If it doesn't work, then report failure
+        // if (rn == null || cn == null) return false;
+
+        // First update currentBranch and the prefix trees
+        self.row_nodes[self.current_row] = rn;
+        self.col_nodes[self.current_col] = cn;
+        self.current_branch = 0;
+
+        // Second, step currentRow, currentCol forward
+        if self.current_row <= self.current_col {
+            self.current_col += 1; // Grow a row rightward
+
+            // If the row is entirely full,
+            //  then go to the start of the next column.
+            if self.current_col == self.cols {
+                self.current_col = self.current_row;
+                self.current_row = self.current_col + 1;
+            }
+        } else {
+            self.current_row += 1; // Grow a column downward
+
+            // If the column is entirely full,
+            //  then go to the start of the next row.
+            if self.current_row == self.rows {
+                self.current_row = self.current_col + 1;
+                self.current_col = self.current_row;
+            }
+        }
+
+        true // Report Success
     }
 }
 
