@@ -6,15 +6,15 @@ pub type Link = LinkedList<usize>;
 
 pub struct Node {
     //
-    parent: NodeRef,
-    children: Vec<Self>,
+    parent: Option<NodeRef>,
+    children: Vec<NodeRef>,
     branch: usize,
     data: Link,
 }
 
 impl Node {
     //
-    pub fn new(parent: NodeRef, branch: usize) -> Self {
+    pub fn new(parent: Option<NodeRef>, branch: usize) -> Self {
         Self {
             parent,
             children: vec![],

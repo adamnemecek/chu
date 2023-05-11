@@ -4,12 +4,16 @@ pub struct Tree {
     //
     arity: usize,
     length: usize,
-    // top:
+    root: NodeRef,
 }
 
 impl Tree {
-    pub fn new(arity: usize, lenght: usize) -> Self {
-        unimplemented!()
+    pub fn new(arity: usize, length: usize) -> Self {
+        Self {
+            arity,
+            length,
+            root: Node::new(None, 0).into(),
+        }
     }
 
     pub fn arity(&self) -> usize {
