@@ -7,6 +7,14 @@ use crate::prelude::*;
 //     no(Option<Box<Chu>>),
 // }
 
+enum A {
+    Unknown,
+    Initial,
+    Final,
+    Middle,
+    Duplicate,
+}
+
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
@@ -73,15 +81,19 @@ impl Chu {
         unimplemented!()
     }
 
-    pub fn seq(a: Self, b: Self) -> Self {
-        let k = a.k.max(b.k);
+    pub fn seq(&self, other: &Self) -> Self {
+        let k = self.k.max(other.k);
 
-        let class_a = a.classify_cols();
-        let class_b = b.classify_cols();
+        let class_a = self.classify_cols();
+        let class_b = other.classify_cols();
         unimplemented!()
     }
 
     pub fn classify_cols(&self) {
+        unimplemented!()
+    }
+
+    pub fn compare_cols(col1: usize, col2: usize) -> Option<std::cmp::Ordering> {
         unimplemented!()
     }
 }
@@ -105,12 +117,19 @@ impl std::ops::Mul for Chu {
 }
 
 impl Chu {
-    fn sequence(&self, other: &Self) -> Self {
-        unimplemented!()
-    }
-
     fn implication(&self, other: Self) -> Self {
         let k = self.k.max(other.k);
+        let size = self.rows() * other.cols();
+
+        let mut mg = MatrixGenerator::new(other.row_tree(), self.col_tree());
+
+        while mg.next() {
+            //
+            let mut num_instances = 1;
+            // for r in mg.nrows() {
+            //
+            // }
+        }
         unimplemented!()
     }
 }
