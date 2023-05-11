@@ -50,25 +50,22 @@ impl MatrixGenerator {
         let rows = col_tree.len();
         let cols = row_tree.len();
 
-        // let row_nodes =
-        let row_links = vec![None; rows];
-        let col_links = vec![None; cols];
-
         Self {
             rows,
             cols,
             k: row_tree.arity(),
+            row_nodes: vec![row_tree.root().unwrap(); rows],
+            col_nodes: vec![col_tree.root().unwrap(); cols],
+
             row_tree,
             col_tree,
 
-            row_nodes: vec![],
-            col_nodes: vec![],
             current_row: 0,
             current_col: 0,
             current_branch: 0,
             done: false,
-            row_links,
-            col_links,
+            row_links: vec![None; rows],
+            col_links: vec![None; cols],
         }
     }
 
