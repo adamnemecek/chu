@@ -9,7 +9,7 @@ pub struct Node {
     parent: Option<NodeRef>,
     children: Vec<NodeRef>,
     branch: usize,
-    data: Link,
+    link: Link,
 }
 
 impl Node {
@@ -19,7 +19,7 @@ impl Node {
             parent,
             children: vec![],
             branch,
-            data: Link::new(),
+            link: Link::new(),
         }
     }
 
@@ -29,6 +29,10 @@ impl Node {
 
     pub fn parent(&self) -> NodeRef {
         unimplemented!()
+    }
+
+    pub fn link(&self) -> &Link {
+        &self.link
     }
 
     pub fn branch(&self) -> usize {

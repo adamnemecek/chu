@@ -28,7 +28,10 @@ impl Tree {
         self.root.clone()
     }
 
-    pub fn find_line(&self, line: &[usize]) -> Option<Link> {
+    // find_line: Returns a linked list of the
+    // indexes of all lines matching the given line.
+    // line is trace i think
+    pub fn find_line(&self, line: &[usize]) -> Option<&Link> {
         if line.len() != self.len {
             return None;
         }
@@ -42,7 +45,8 @@ impl Tree {
                 return None;
             }
         }
-        // cur.da
+
+        // cur.map(|x| x.link())
         unimplemented!()
     }
 
