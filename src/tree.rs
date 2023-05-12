@@ -34,7 +34,7 @@ impl Tree {
     // find_line: Returns a linked list of the
     // indexes of all lines matching the given line.
     // line is trace i think
-    pub fn find_line(&self, line: &[usize]) -> Option<&Link> {
+    pub fn find_line(&self, line: &[usize]) -> Option<Link> {
         if line.len() != self.len {
             return None;
         }
@@ -46,8 +46,7 @@ impl Tree {
             cur = v.child(*l).clone().into();
         }
 
-        // cur.map(|x| x.link())
-        unimplemented!()
+        cur.map(|x| x.link().clone())
     }
 
     // addLine: Inserts the given line at the given index.
@@ -58,10 +57,11 @@ impl Tree {
             return None;
         }
 
-        let mut current = &self.root;
+        let mut current = self.root.clone();
 
         for i in line {
             //
+            current = current.unwrap().grow(*i, self.arity).into();
         }
 
         unimplemented!()
