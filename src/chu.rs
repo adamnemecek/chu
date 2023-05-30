@@ -89,7 +89,7 @@ impl Chu {
 
     pub fn query(&self) -> Self {
         if self.k == 2 {
-            return Self::query2();
+            return self.query2();
         }
 
         // let row =
@@ -103,9 +103,51 @@ impl Chu {
         unimplemented!()
     }
 
-    fn query2() -> Self {
-        // let row_tree = Tree::new(2, self.cols());
+    // fn query2() -> Self {
+    //     // let row_tree = Tree::new(2, self.cols());
 
+    //     unimplemented!()
+    // }
+
+    fn query2(&self) -> Self {
+        // let mut result_rows: Vec<Vec<i32>> = Vec::new();
+        // let mut row_tree: HashSet<Vec<i32>> = HashSet::new();
+        // let mut future_rows: VecDeque<Vec<i32>> = VecDeque::new();
+
+        // for row in 0..self.nrows() {
+        //     future_rows.push_back(row.clone());
+        // }
+
+        // let zero_row = vec![0; self.ncols];
+        // future_rows.push_back(zero_row.clone());
+
+        // let one_row = vec![1; self.ncols];
+        // future_rows.push_back(one_row.clone());
+
+        // while let Some(row) = future_rows.pop_front() {
+        //     if !row_tree.contains(&row) {
+        //         let old_rows = result_rows.clone();
+
+        //         for old_row in old_rows {
+        //             let mut union = vec![0; self.ncols];
+        //             for c in 0..self.ncols {
+        //                 union[c] = if row[c] == 1 || old_row[c] == 1 { 1 } else { 0 };
+        //             }
+        //             future_rows.push_back(union);
+
+        //             let mut intersection = vec![0; self.ncols];
+        //             for c in 0..self.ncols {
+        //                 intersection[c] = if row[c] == 1 && old_row[c] == 1 { 1 } else { 0 };
+        //             }
+        //             future_rows.push_back(intersection);
+        //         }
+
+        //         row_tree.insert(row.clone());
+        //         result_rows.push(row);
+        //     }
+        // }
+
+        // Self::new(2, result_rows.len(), result_rows)
         unimplemented!()
     }
 

@@ -87,9 +87,6 @@ impl<T: Copy + Default> Matrix<T> {
 impl<T: Copy + Default> std::ops::Index<(usize, usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, index: (usize, usize)) -> &Self::Output {
-        // let v = self.offset(index);
-        // let (a, b) = index;
-        // println!("{a}{b} {v}");
         &self.data[self.offset(index)]
     }
 }
