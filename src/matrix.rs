@@ -38,10 +38,17 @@ impl<T: Copy + Default> Matrix<T> {
     }
 
     pub fn row_range(&self, row: usize) -> std::ops::Range<usize> {
-        let start = row * self.shape.1;
+        let start = row * self.shape.0;
         start..(start + self.shape.1)
     }
 
+    pub fn nrows(&self) -> usize {
+        self.shape().0
+    }
+
+    pub fn ncols(&self) -> usize {
+        self.shape().1
+    }
     // pub fn col_range(&self, row: usize) -> std::ops::Range<usize> {
     //     let start = row * self.shape.1;
     //     start..(start + self.shape.1)
@@ -58,12 +65,16 @@ impl<T: Copy + Default> Matrix<T> {
     }
 
     pub fn transpose(&self) -> Self {
+        let mut z = 0;
         let mut ret = Self::new((self.shape.1, self.shape.0));
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
+                println!("{j}:{i} => {i}:{j}");
+                z += 1;
                 ret[(i, j)] = self[(j, i)];
             }
         }
+        println!("{z}");
         ret
         // Self::new_with_fill((self.shape.1, self.shape.0), |(i, j)| self[(j, i)])
     }
@@ -76,6 +87,9 @@ impl<T: Copy + Default> Matrix<T> {
 impl<T: Copy + Default> std::ops::Index<(usize, usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, index: (usize, usize)) -> &Self::Output {
+        let v = self.offset(index);
+        let (a, b) = index;
+        println!("{a}{b} {v}");
         &self.data[self.offset(index)]
     }
 }
@@ -95,11 +109,12 @@ impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
 
 impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "")?;
-        for row in 0..self.shape.0 {
-            writeln!(f, "{:?}", self.row(row))?;
-        }
-        Ok(())
+        // writeln!(f, "")?;
+        // for row in 0..self.shape.0 {
+        //     writeln!(f, "{:?}", self.row(row))?;
+        // }
+        // Ok(())
+        self.data.fmt(f)
     }
 }
 
