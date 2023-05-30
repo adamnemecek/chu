@@ -205,7 +205,7 @@ impl Chu {
         Self::new(k, m, false)
     }
 
-    // classifyCols: Returns an array of integers which classify
+    // classify_cols: Returns an array of integers which classify
     // the columns of a Chu space into the five catagories above.
 
     pub fn classify_cols(&self) -> Vec<Ordering> {
@@ -268,8 +268,14 @@ impl Chu {
 }
 
 impl Conformable for Chu {
-    fn conform(ctx: Context) -> Self {
-        unimplemented!()
+    fn conform(&self, ctx: Context) -> Self {
+        if ctx.standardization {
+            // self.
+            self.standardsize()
+        } else {
+            // self
+            unimplemented!()
+        }
     }
 }
 
@@ -317,6 +323,10 @@ impl std::ops::Index<(usize, usize)> for Chu {
 }
 
 impl Chu {
+    pub fn standardsize(&self) -> Self {
+        unimplemented!()
+    }
+
     // None == incomparable
     fn compare_cols(&self, col1: usize, col2: usize) -> Option<std::cmp::Ordering> {
         use std::cmp::Ordering;

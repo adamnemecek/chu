@@ -1,5 +1,5 @@
 use crate::prelude::*;
 
 pub trait Conformable {
-    fn conform(ctx: Context) -> Chu;
+    fn conform(&self, ctx: Context) -> Chu;
 }
