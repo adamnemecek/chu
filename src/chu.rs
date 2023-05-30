@@ -6,12 +6,19 @@ use crate::prelude::*;
 //     yes,
 //     no(Option<Box<Chu>>),
 // }
+// use std::cmp::
 
-enum A {
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Ordering {
+    // < nothing,   > nothing
     Unknown,
+    // < something, > nothing
     Initial,
+    // < nothing,   > something
     Final,
+    // < something, > something
     Middle,
+    // == previous something
     Duplicate,
 }
 
@@ -96,7 +103,7 @@ impl Chu {
         unimplemented!()
     }
 
-    fn choice(&self, other: &Self) -> Self {
+    pub fn choice(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
         let rows = self.rows() + other.rows();
         let cols = self.cols() + other.cols();
@@ -123,14 +130,87 @@ impl Chu {
     }
 
     pub fn seq(&self, other: &Self) -> Self {
-        let k = self.k.max(other.k);
+        // let k = self.k.max(other.k);
 
-        let class_a = self.classify_cols();
-        let class_b = other.classify_cols();
+        // let class_a = self.classify_cols();
+        // let class_b = other.classify_cols();
+
+        // let k = self.k.max(other.k);
+
+        // // Classify columns of A and B
+        // let cls_a = self.classify_cols();
+        // let cls_b = other.classify_cols();
+
+        // // Count rows and columns of answer.
+        // // A column of the answer consists of the concatenation of
+        // // a column of A and a column of B. Duplicates are not allowed.
+        // // The column (state) of A must be final (= FINAL || UNKNOWN).
+        // // The column (state) of B must be initial (= INITIAL || UNKNOWN).
+        // let nrows = self.rows() + other.rows();
+        // let mut ncols = 0;
+
+        // for ac in 0..self.cols() {
+        //     if cls_a[ac] == Ordering::Duplicate {
+        //         continue;
+        //     }
+
+        //     for bc in 0..other.cols() {
+        //         if cls_b[bc] == Ordering::Duplicate {
+        //             continue;
+        //         }
+
+        //         if matches!(cls_a[ac], Ordering::Unknown | Ordering::Final)
+        //         || matches!(cls_b[ac], Ordering::Unknown | Ordering::Initial) {
+        //             ncols += 1;
+        //         }
+        // }
+
+        // // Form answer, column by column
+        // // let mut matrix: Vec<Vec<i32>> = vec![vec![0; ncols]; nrows];
+        // let mut m = Matrix::<usize>::new((rows, cols));
+        // let (mut r, mut c) = (0, 0);
+
+        // for ac in 0..self.cols() {
+        //     if cls_a[ac] == Ordering::Duplicate {
+        //         continue;
+        //     }
+
+        //     for bc in 0..other.cols() {
+        //         if cls_b[bc] == Ordering::Duplicate {
+        //             continue;
+        //         }
+
+        //         // if cls_a[ac] == Unknown
+        //         //     || cls_a[ac] == Final
+        //         //     || cls_b[bc] == Unknown
+        //         //     || cls_b[bc] == Initial
+        //         // {
+        //         if matches!(class_a[ac], Ordering::Unknown | Ordering::Final)
+        //             || matches!(class_b[ac], Ordering::Unknown | Ordering::Initial)
+        //         {
+        //             // Create concatenation of A.matrix[*][ac] and B.matrix[*][bc]
+        //             for ar in 0..self.rows() {
+        //                 m[(r,c)] = self[(ar, ac)];
+        //                 r += 1;
+        //             }
+
+        //             for br in 0..other.rows() {
+        //                 m[(r, c)] = other[(br, bc)];
+        //                 r += 1;
+        //             }
+
+        //             r = 0;
+        //             c += 1;
+        //         }
+        //     }
+
+        //     // Build and return result
+        //     Some(Chu::new(k, nrows, ncols, matrix, false))
+        // }
         unimplemented!()
     }
 
-    pub fn classify_cols(&self) {
+    pub fn classify_cols(&self) -> Vec<Ordering> {
         unimplemented!()
     }
 
@@ -189,7 +269,7 @@ impl std::ops::Index<(usize, usize)> for Chu {
 }
 
 impl Chu {
-    fn implication(&self, other: Self) -> Self {
+    pub fn implication(&self, other: Self) -> Self {
         let k = self.k.max(other.k);
         let size = self.rows() * other.cols();
 
