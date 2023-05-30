@@ -356,7 +356,7 @@ impl Chu {
         Some(result)
     }
 
-    fn row_sort(&self, unique_rows: &mut [usize]) -> usize {
+    pub fn row_sort(&self, unique_rows: &mut [usize]) -> usize {
         let mut num_unique = 0;
 
         'sort: for r in 0..self.rows() {
@@ -392,8 +392,40 @@ impl Chu {
         num_unique
     }
 
-    pub fn col_sort(&self, unique: &[usize]) -> usize {
-        unimplemented!()
+    pub fn col_sort(&self, unique_cols: &mut [usize]) -> usize {
+        let mut num_unique = 0;
+
+        'sort: for c in 0..self.cols() {
+            let (mut l, mut h) = (0, num_unique);
+
+            'search: while l < h {
+                let m = (l + h) / 2;
+
+                'compare: for r in 0..self.rows() {
+                    if self[(r, unique_cols[m])] == self[(r, c)] {
+                        continue 'compare;
+                    }
+
+                    if self[(r, unique_cols[m])] > self[(r, c)] {
+                        h = m;
+                    } else {
+                        l = m + 1;
+                    }
+
+                    continue 'search;
+                }
+
+                continue 'sort;
+            }
+
+            for i in (l + 1..=num_unique).rev() {
+                unique_cols[i] = unique_cols[i - 1];
+            }
+            unique_cols[l] = c;
+            num_unique += 1;
+        }
+
+        num_unique
     }
 
     pub fn implication(&self, other: Self) -> Self {
