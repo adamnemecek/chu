@@ -27,6 +27,12 @@ impl<T: Copy + Default> Matrix<T> {
             }
         }
     }
+
+    pub fn new_with_fill(shape: (usize, usize), f: impl Fn((usize, usize)) -> T) -> Self {
+        let mut m = Self::new(shape);
+        m.fill(f);
+        m
+    }
     pub fn shape(&self) -> (usize, usize) {
         self.shape
     }
@@ -59,6 +65,7 @@ impl<T: Copy + Default> Matrix<T> {
             }
         }
         ret
+        // Self::new_with_fill((self.shape.1, self.shape.0), |(i, j)| self[(j, i)])
     }
 
     fn offset(&self, index: (usize, usize)) -> usize {
