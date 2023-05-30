@@ -18,13 +18,8 @@ use crate::prelude::ExactFromFn;
 #[derive(PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
-
     pub data: Vec<T>,
 }
-
-// fn t<T>(a: (T, T)) -> (T, T) {
-//     (a.1, a.0)
-// }
 
 impl<T: Copy + Default> Matrix<T> {
     pub fn new(shape: (usize, usize)) -> Self {
@@ -37,8 +32,7 @@ impl<T: Copy + Default> Matrix<T> {
     pub fn fill(&mut self, f: impl Fn((usize, usize)) -> T) {
         for i in 0..self.shape.0 {
             for j in 0..self.shape.1 {
-                let r = f((i, j));
-                self[(i, j)] = r;
+                self[(i, j)] = f((i, j));
             }
         }
     }
@@ -55,14 +49,16 @@ impl<T: Copy + Default> Matrix<T> {
 
     pub fn row_range(&self, row: usize) -> std::ops::Range<usize> {
         assert!(row <= self.nrows());
-        let start = row * self.shape.1;
-        start..(start + self.shape.1)
+        let start = row * self.ncols();
+        start..(start + self.ncols())
     }
 
+    #[inline]
     pub fn nrows(&self) -> usize {
         self.shape().0
     }
 
+    #[inline]
     pub fn ncols(&self) -> usize {
         self.shape().1
     }
