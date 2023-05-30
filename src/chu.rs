@@ -22,6 +22,12 @@ pub enum Ordering {
     Duplicate,
 }
 
+impl Default for Ordering {
+    fn default() -> Self {
+        Self::Unknown
+    }
+}
+
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
@@ -199,12 +205,65 @@ impl Chu {
         Self::new(k, m, false)
     }
 
-    pub fn classify_cols(&self) -> Vec<Ordering> {
-        unimplemented!()
-    }
+    // classifyCols: Returns an array of integers which classify
+    // the columns of a Chu space into the five catagories above.
 
-    pub fn compare_cols(col1: usize, col2: usize) -> Option<std::cmp::Ordering> {
-        unimplemented!()
+    pub fn classify_cols(&self) -> Vec<Ordering> {
+        let mut cls = vec![Ordering::Unknown; self.cols()];
+
+        'outer: for c in 0..self.cols() {
+            cls[c] = Ordering::Unknown;
+
+            for d in 0..c {
+                // Skip comparisons against duplicates or middle elements.
+                if matches!(cls[d], Ordering::Duplicate | Ordering::Middle) {
+                    continue;
+                }
+
+                // Col c <> col d, so nothing can be inferred.
+                let Some(res) = self.compare_cols(c, d) else { continue };
+
+                match res {
+                    // Col c == col d, throw out c by classifying it as Ordering::Duplicate.
+                    std::cmp::Ordering::Equal => {
+                        cls[c] = Ordering::Duplicate;
+                        continue 'outer;
+                    }
+
+                    // Col c < col d.
+                    std::cmp::Ordering::Less => {
+                        match cls[c] {
+                            Ordering::Unknown => cls[c] = Ordering::Initial,
+                            Ordering::Final => cls[c] = Ordering::Middle,
+                            _ => {}
+                        }
+                        match cls[d] {
+                            Ordering::Unknown => cls[d] = Ordering::Final,
+                            Ordering::Initial => cls[d] = Ordering::Middle,
+                            _ => {}
+                        }
+                    }
+
+                    // Col c > col d.
+                    std::cmp::Ordering::Greater => {
+                        match cls[c] {
+                            Ordering::Unknown => cls[c] = Ordering::Final,
+                            Ordering::Initial => cls[c] = Ordering::Middle,
+                            _ => {}
+                        }
+                        match cls[d] {
+                            Ordering::Unknown => cls[d] = Ordering::Initial,
+                            Ordering::Final => cls[d] = Ordering::Middle,
+                            _ => {}
+                        }
+                    }
+
+                    _ => {}
+                }
+            } // INNER
+        } // OUTER
+
+        cls
     }
 }
 
@@ -258,6 +317,35 @@ impl std::ops::Index<(usize, usize)> for Chu {
 }
 
 impl Chu {
+    // None == incomparable
+    fn compare_cols(&self, col1: usize, col2: usize) -> Option<std::cmp::Ordering> {
+        use std::cmp::Ordering;
+        let mut result = Ordering::Equal;
+
+        for r in 0..self.rows() {
+            match self[(r, col1)].cmp(&self[(r, col2)]) {
+                Ordering::Less => {
+                    //
+                    match result {
+                        Ordering::Equal => result = Ordering::Less,
+                        Ordering::Greater => return None,
+                        _ => {}
+                    }
+                }
+                Ordering::Equal => {
+                    //
+                }
+                Ordering::Greater => match result {
+                    Ordering::Equal => result = Ordering::Greater,
+                    Ordering::Less => return None,
+                    _ => {}
+                },
+            }
+        }
+
+        Some(result)
+    }
+
     pub fn implication(&self, other: Self) -> Self {
         let k = self.k.max(other.k);
         let size = self.rows() * other.cols();
