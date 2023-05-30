@@ -18,26 +18,25 @@ enum A {
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
-    std: Option<Box<Self>>,
+    std: Option<Box<Matrix<usize>>>,
 }
 
 impl Chu {
     pub fn new(k: usize, data: Matrix<usize>, standardized: bool) -> Self {
-        let self_ = Self {
-            k,
-            data,
-            std: if standardized {
-                None
-            } else {
-                // Some(None)
-                unimplemented!()
-            },
-        };
-        self_
+        let mut s = Self { k, data, std: None };
+
+        // s.std = if standardized {
+        //     // Some(Box::new(s))
+        //     Some(data.clone())
+        // } else {
+        //     None
+        // };
+        s
     }
 
     pub fn new_with_size(size: usize) -> Self {
-        unimplemented!()
+        let m = Matrix::new((1, size));
+        Self::new(size, m, true)
     }
 
     pub fn rows(&self) -> usize {
@@ -49,15 +48,21 @@ impl Chu {
     }
 
     pub fn row_tree(&self) -> Tree {
-        let mut t = Tree::new(self.k, self.shape().1);
-        for i in 0..self.rows() {
-            //
+        let mut t = Tree::new(self.k, self.cols());
+        for r in 0..self.rows() {
+            let line = self.data.row(r);
+            t.add_line(line, r);
         }
         t
     }
 
     pub fn col_tree(&self) -> Tree {
-        unimplemented!()
+        let mut t = Tree::new(self.k, self.rows());
+        for c in 0..self.rows() {
+            let line = self.data.col(c);
+            t.add_line(line, c);
+        }
+        t
     }
 
     pub fn shape(&self) -> (usize, usize) {
@@ -70,6 +75,8 @@ impl Chu {
     }
 
     fn query2() -> Self {
+        // let row_tree = Tree::new(2, self.cols());
+
         unimplemented!()
     }
 
