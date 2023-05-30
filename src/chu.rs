@@ -158,8 +158,8 @@ impl std::ops::Mul for Chu {
         let mut c = 0;
         // Loop over rows of A
 
-        // for(int ar=0;ar<A.nrows;ar++)
         for ar in 0..self.rows() {
+            // Loop over rows of B
             for br in 0..rhs.rows() {
                 // Create concatination of A.matrix[ar] and B.matrix[br]
 
@@ -177,8 +177,7 @@ impl std::ops::Mul for Chu {
                 c = 0;
             }
         }
-        // Self::new()
-        unimplemented!()
+        Self::new(k, m, false)
     }
 }
 
