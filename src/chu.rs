@@ -130,40 +130,42 @@ impl Chu {
     }
 
     pub fn seq(&self, other: &Self) -> Self {
-        // let k = self.k.max(other.k);
+        let k = self.k.max(other.k);
 
-        // let class_a = self.classify_cols();
-        // let class_b = other.classify_cols();
+        let class_a = self.classify_cols();
+        let class_b = other.classify_cols();
 
-        // let k = self.k.max(other.k);
+        let k = self.k.max(other.k);
 
-        // // Classify columns of A and B
-        // let cls_a = self.classify_cols();
-        // let cls_b = other.classify_cols();
+        // Classify columns of A and B
+        let cls_a = self.classify_cols();
+        let cls_b = other.classify_cols();
 
-        // // Count rows and columns of answer.
-        // // A column of the answer consists of the concatenation of
-        // // a column of A and a column of B. Duplicates are not allowed.
-        // // The column (state) of A must be final (= FINAL || UNKNOWN).
-        // // The column (state) of B must be initial (= INITIAL || UNKNOWN).
-        // let nrows = self.rows() + other.rows();
-        // let mut ncols = 0;
+        // Count rows and columns of answer.
+        // A column of the answer consists of the concatenation of
+        // a column of A and a column of B. Duplicates are not allowed.
+        // The column (state) of A must be final (= FINAL || UNKNOWN).
+        // The column (state) of B must be initial (= INITIAL || UNKNOWN).
+        let nrows = self.rows() + other.rows();
+        let mut ncols = 0;
 
-        // for ac in 0..self.cols() {
-        //     if cls_a[ac] == Ordering::Duplicate {
-        //         continue;
-        //     }
+        for ac in 0..self.cols() {
+            if cls_a[ac] == Ordering::Duplicate {
+                continue;
+            }
 
-        //     for bc in 0..other.cols() {
-        //         if cls_b[bc] == Ordering::Duplicate {
-        //             continue;
-        //         }
+            for bc in 0..other.cols() {
+                if cls_b[bc] == Ordering::Duplicate {
+                    continue;
+                }
 
-        //         if matches!(cls_a[ac], Ordering::Unknown | Ordering::Final)
-        //         || matches!(cls_b[ac], Ordering::Unknown | Ordering::Initial) {
-        //             ncols += 1;
-        //         }
-        // }
+                if matches!(cls_a[ac], Ordering::Unknown | Ordering::Final)
+                    || matches!(cls_b[ac], Ordering::Unknown | Ordering::Initial)
+                {
+                    ncols += 1;
+                }
+            }
+        }
 
         // // Form answer, column by column
         // // let mut matrix: Vec<Vec<i32>> = vec![vec![0; ncols]; nrows];
