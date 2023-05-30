@@ -52,7 +52,7 @@ impl Chu {
         Self::new(size, m, true)
     }
 
-    pub fn rows(&self) -> usize {
+    pub fn nrows(&self) -> usize {
         self.shape().0
     }
 
@@ -62,7 +62,7 @@ impl Chu {
 
     pub fn row_tree(&self) -> Tree {
         let mut t = Tree::new(self.k, self.cols());
-        for r in 0..self.rows() {
+        for r in 0..self.nrows() {
             let line = self.data.row(r);
             t.add_line(line, r);
         }
@@ -70,8 +70,8 @@ impl Chu {
     }
 
     pub fn col_tree(&self) -> Tree {
-        let mut t = Tree::new(self.k, self.rows());
-        for c in 0..self.rows() {
+        let mut t = Tree::new(self.k, self.nrows());
+        for c in 0..self.nrows() {
             let line = self.data.col(c);
             t.add_line(line, c);
         }
@@ -102,12 +102,6 @@ impl Chu {
 
         unimplemented!()
     }
-
-    // fn query2() -> Self {
-    //     // let row_tree = Tree::new(2, self.cols());
-
-    //     unimplemented!()
-    // }
 
     fn query2(&self) -> Self {
         // let mut result_rows: Vec<Vec<i32>> = Vec::new();
@@ -153,13 +147,13 @@ impl Chu {
 
     pub fn choice(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
-        let rows = self.rows() + other.rows();
+        let nrows = self.nrows() + other.nrows();
         let cols = self.cols() + other.cols();
 
-        let mut m = Matrix::new((rows, cols));
-        for r in 0..rows {
+        let mut m = Matrix::new((nrows, cols));
+        for r in 0..nrows {
             for c in 0..cols {
-                m[(r, c)] = if r < self.rows() {
+                m[(r, c)] = if r < self.nrows() {
                     if c < self.cols() {
                         self[(r, c)]
                     } else {
@@ -169,7 +163,7 @@ impl Chu {
                     if c < self.cols() {
                         0
                     } else {
-                        other[(r - self.rows(), c - self.cols())]
+                        other[(r - self.nrows(), c - self.cols())]
                     }
                 }
             }
@@ -189,7 +183,7 @@ impl Chu {
         // a column of A and a column of B. Duplicates are not allowed.
         // The column (state) of A must be final (= FINAL || UNKNOWN).
         // The column (state) of B must be initial (= INITIAL || UNKNOWN).
-        let rows = self.rows() + other.rows();
+        let nrows = self.nrows() + other.nrows();
         let mut cols = 0;
 
         for ac in 0..self.cols() {
@@ -211,7 +205,7 @@ impl Chu {
         }
 
         // // Form answer, column by column
-        let mut m = Matrix::new((rows, cols));
+        let mut m = Matrix::new((nrows, cols));
         let (mut r, mut c) = (0, 0);
 
         for ac in 0..self.cols() {
@@ -228,12 +222,12 @@ impl Chu {
                     || matches!(cls_b[ac], Ordering::Unknown | Ordering::Initial)
                 {
                     // Create concatenation of A.matrix[*][ac] and B.matrix[*][bc]
-                    for ar in 0..self.rows() {
+                    for ar in 0..self.nrows() {
                         m[(r, c)] = self[(ar, ac)];
                         r += 1;
                     }
 
-                    for br in 0..other.rows() {
+                    for br in 0..other.nrows() {
                         m[(r, c)] = other[(br, bc)];
                         r += 1;
                     }
@@ -325,18 +319,18 @@ impl std::ops::Mul for Chu {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self::Output {
         let k = self.k.max(rhs.k);
-        let rows = self.rows() * rhs.rows();
+        let nrows = self.nrows() * rhs.nrows();
         let cols = self.cols() + rhs.cols();
 
-        let mut m = Matrix::new((rows, cols));
+        let mut m = Matrix::new((nrows, cols));
 
         let mut r = 0;
         let mut c = 0;
         // Loop over rows of A
 
-        for ar in 0..self.rows() {
+        for ar in 0..self.nrows() {
             // Loop over rows of B
-            for br in 0..rhs.rows() {
+            for br in 0..rhs.nrows() {
                 // Create concatination of A.matrix[ar] and B.matrix[br]
 
                 for ac in 0..self.cols() {
@@ -374,7 +368,7 @@ impl Chu {
         use std::cmp::Ordering;
         let mut result = Ordering::Equal;
 
-        for r in 0..self.rows() {
+        for r in 0..self.nrows() {
             match self[(r, col1)].cmp(&self[(r, col2)]) {
                 Ordering::Less => {
                     //
@@ -401,7 +395,7 @@ impl Chu {
     pub fn row_sort(&self, unique_rows: &mut [usize]) -> usize {
         let mut num_unique = 0;
 
-        'sort: for r in 0..self.rows() {
+        'sort: for r in 0..self.nrows() {
             let (mut l, mut h) = (0, num_unique);
 
             'search: while l < h {
@@ -443,7 +437,7 @@ impl Chu {
             'search: while l < h {
                 let m = (l + h) / 2;
 
-                'compare: for r in 0..self.rows() {
+                'compare: for r in 0..self.nrows() {
                     if self[(r, unique_cols[m])] == self[(r, c)] {
                         continue 'compare;
                     }
@@ -485,7 +479,7 @@ impl Chu {
         // }
         // unimplemented!()
 
-        let size = self.rows() * other.cols();
+        let size = self.nrows() * other.cols();
         let mut transforms: Vec<Vec<i32>> = Vec::new();
         let MG = MatrixGenerator::new(other.row_tree(), self.col_tree());
 
