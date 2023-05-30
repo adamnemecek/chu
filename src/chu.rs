@@ -356,6 +356,46 @@ impl Chu {
         Some(result)
     }
 
+    fn row_sort(&self, unique_rows: &mut [usize]) -> usize {
+        let mut num_unique = 0;
+
+        'sort: for r in 0..self.rows() {
+            let (mut l, mut h) = (0, num_unique);
+
+            'search: while l < h {
+                let m = (l + h) / 2;
+
+                'compare: for c in 0..self.cols() {
+                    if self[(unique_rows[m], c)] == self[(r, c)] {
+                        continue 'compare;
+                    }
+
+                    if self[(unique_rows[m], c)] > self[(r, c)] {
+                        h = m;
+                    } else {
+                        l = m + 1;
+                    }
+
+                    continue 'search;
+                }
+
+                continue 'sort;
+            }
+
+            for i in (l + 1..=num_unique).rev() {
+                unique_rows[i] = unique_rows[i - 1];
+            }
+            unique_rows[l] = r;
+            num_unique += 1;
+        }
+
+        num_unique
+    }
+
+    pub fn col_sort(&self, unique: &[usize]) -> usize {
+        unimplemented!()
+    }
+
     pub fn implication(&self, other: Self) -> Self {
         let k = self.k.max(other.k);
         let size = self.rows() * other.cols();
