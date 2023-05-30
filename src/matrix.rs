@@ -3,6 +3,18 @@ use std::{
     iter::FromFn,
 };
 
+// pub trait Inv {
+//     fn inv(&self) -> Self;
+// }
+
+// impl<T: Clone> Inv for (T, T) {
+//     fn inv(&self) -> Self {
+//         (self.1.clone(), self.0.clone())
+//     }
+// }
+
+use crate::prelude::ExactFromFn;
+
 #[derive(PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
@@ -63,10 +75,9 @@ impl<T: Copy + Default> Matrix<T> {
         &self.data[self.row_range(row)]
     }
 
-    pub fn col(&self, col: usize) -> &[T] {
-        // &self.data[self.c
-        // self.data.co
-        unimplemented!()
+    pub fn col<'a>(&self, col: usize) -> impl Iterator<Item = &T> + ExactSizeIterator {
+        let mut r = 0..self.nrows();
+        ExactFromFn::new(self.nrows(), move || r.next().map(|i| &self[(i, col)]))
     }
 
     pub fn transpose(&self) -> Self {
@@ -140,34 +151,3 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
 //         (self.0)()
 //     }
 // }
-
-struct ExactFromFn<F> {
-    len: usize,
-    i: FromFn<F>,
-}
-
-impl<T, F: FnMut() -> Option<T>> ExactFromFn<F> {
-    pub fn new(len: usize, f: F) -> Self {
-        Self {
-            len,
-            i: std::iter::from_fn(f),
-        }
-    }
-}
-
-impl<T, F: FnMut() -> Option<T>> Iterator for ExactFromFn<F> {
-    type Item = T;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.i.next()
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        (self.len, self.len.into())
-    }
-}
-
-impl<T, F: FnMut() -> Option<T>> ExactSizeIterator for ExactFromFn<F> {
-    fn len(&self) -> usize {
-        self.len
-    }
-}
