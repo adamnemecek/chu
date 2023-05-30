@@ -370,14 +370,11 @@ impl Chu {
 
         for r in 0..self.nrows() {
             match self[(r, col1)].cmp(&self[(r, col2)]) {
-                Ordering::Less => {
-                    //
-                    match result {
-                        Ordering::Equal => result = Ordering::Less,
-                        Ordering::Greater => return None,
-                        _ => {}
-                    }
-                }
+                Ordering::Less => match result {
+                    Ordering::Equal => result = Ordering::Less,
+                    Ordering::Greater => return None,
+                    _ => {}
+                },
                 Ordering::Equal => {
                     //
                 }
