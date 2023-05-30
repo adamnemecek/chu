@@ -74,18 +74,52 @@ impl Chu {
         Self::new(self.k, self.data.transpose(), self.std.is_none())
     }
 
+    pub fn query(&self) -> Self {
+        if self.k == 2 {
+            return Self::query2();
+        }
+
+        // let row =
+
+        let row_tree = self.row_tree();
+
+        for k in 0..self.k {
+            //
+        }
+
+        unimplemented!()
+    }
+
     fn query2() -> Self {
         // let row_tree = Tree::new(2, self.cols());
 
         unimplemented!()
     }
 
-    pub fn query(&self) -> Self {
-        if self.k == 2 {
-            return Self::query2();
-        }
+    fn choice(&self, other: &Self) -> Self {
+        let k = self.k.max(other.k);
+        let rows = self.rows() + other.rows();
+        let cols = self.cols() + other.cols();
 
-        unimplemented!()
+        let mut m = Matrix::<usize>::new((rows, cols));
+        for r in 0..rows {
+            for c in 0..cols {
+                m[(r, c)] = if r < self.rows() {
+                    if c < self.cols() {
+                        self[(r, c)]
+                    } else {
+                        0
+                    }
+                } else {
+                    if c < self.cols() {
+                        0
+                    } else {
+                        other[(r - self.rows(), c - self.cols())]
+                    }
+                }
+            }
+        }
+        Chu::new(k, m, false)
     }
 
     pub fn seq(&self, other: &Self) -> Self {
@@ -120,6 +154,13 @@ impl std::ops::Mul for Chu {
 
         let mut m = Matrix::<usize>::new((rows, cols));
         unimplemented!()
+    }
+}
+
+impl std::ops::Index<(usize, usize)> for Chu {
+    type Output = usize;
+    fn index(&self, index: (usize, usize)) -> &Self::Output {
+        &self.data[index]
     }
 }
 
