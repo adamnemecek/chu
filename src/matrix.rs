@@ -30,8 +30,8 @@ impl<T: Copy + Default> Matrix<T> {
     }
 
     pub fn fill(&mut self, f: impl Fn((usize, usize)) -> T) {
-        for i in 0..self.shape.0 {
-            for j in 0..self.shape.1 {
+        for i in 0..self.nrows() {
+            for j in 0..self.ncols() {
                 self[(i, j)] = f((i, j));
             }
         }
@@ -108,42 +108,12 @@ impl<T: Copy + Default> std::ops::IndexMut<(usize, usize)> for Matrix<T> {
     }
 }
 
-// impl<T: Copy + Default + PartialEq> PartialEq for Matrix<T> {
-//     fn eq(&self, other: &Self) -> bool {
-//         true
-//     }
-// }
-
 impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "")?;
-        for row in 0..self.shape.0 {
+        for row in 0..self.nrows() {
             writeln!(f, "{:?}", self.row(row))?;
         }
         Ok(())
-        // self.data.fmt(f)
     }
 }
-
-// #[test]
-// mod tests {
-
-//     // fn test_
-// }
-
-// #[derive(Clone)]
-// #[stable(feature = "iter_from_fn", since = "1.34.0")]
-// pub struct FromFn<F>(F);
-
-// #[stable(feature = "iter_from_fn", since = "1.34.0")]
-// impl<T, F> Iterator for FromFn<F>
-// where
-//     F: FnMut() -> Option<T>,
-// {
-//     type Item = T;
-
-//     #[inline]
-//     fn next(&mut self) -> Option<Self::Item> {
-//         (self.0)()
-//     }
-// }
