@@ -114,7 +114,7 @@ impl Chu {
         let rows = self.rows() + other.rows();
         let cols = self.cols() + other.cols();
 
-        let mut m = Matrix::<usize>::new((rows, cols));
+        let mut m = Matrix::new((rows, cols));
         for r in 0..rows {
             for c in 0..cols {
                 m[(r, c)] = if r < self.rows() {
@@ -169,7 +169,7 @@ impl Chu {
         }
 
         // // Form answer, column by column
-        let mut m = Matrix::<usize>::new((rows, cols));
+        let mut m = Matrix::new((rows, cols));
         let (mut r, mut c) = (0, 0);
 
         for ac in 0..self.cols() {
@@ -286,7 +286,7 @@ impl std::ops::Mul for Chu {
         let rows = self.rows() * rhs.rows();
         let cols = self.cols() + rhs.cols();
 
-        let mut m = Matrix::<usize>::new((rows, cols));
+        let mut m = Matrix::new((rows, cols));
 
         let mut r = 0;
         let mut c = 0;

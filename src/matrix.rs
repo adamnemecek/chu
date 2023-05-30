@@ -7,9 +7,9 @@ pub struct Matrix<T: Copy + Default> {
     pub data: Vec<T>,
 }
 
-fn t<T>(a: (T, T)) -> (T, T) {
-    (a.1, a.0)
-}
+// fn t<T>(a: (T, T)) -> (T, T) {
+//     (a.1, a.0)
+// }
 
 impl<T: Copy + Default> Matrix<T> {
     pub fn new(shape: (usize, usize)) -> Self {
@@ -36,10 +36,10 @@ impl<T: Copy + Default> Matrix<T> {
         start..(start + self.shape.1)
     }
 
-    pub fn col_range(&self, row: usize) -> std::ops::Range<usize> {
-        let start = row * self.shape.1;
-        start..(start + self.shape.1)
-    }
+    // pub fn col_range(&self, row: usize) -> std::ops::Range<usize> {
+    //     let start = row * self.shape.1;
+    //     start..(start + self.shape.1)
+    // }
 
     pub fn row(&self, row: usize) -> &[T] {
         &self.data[self.row_range(row)]
