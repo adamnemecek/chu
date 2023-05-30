@@ -56,12 +56,12 @@ impl Chu {
         self.shape().0
     }
 
-    pub fn cols(&self) -> usize {
+    pub fn ncols(&self) -> usize {
         self.shape().1
     }
 
     pub fn row_tree(&self) -> Tree {
-        let mut t = Tree::new(self.k, self.cols());
+        let mut t = Tree::new(self.k, self.ncols());
         for r in 0..self.nrows() {
             let line = self.data.row(r);
             t.add_line(line, r);
@@ -148,22 +148,22 @@ impl Chu {
     pub fn choice(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
         let nrows = self.nrows() + other.nrows();
-        let cols = self.cols() + other.cols();
+        let ncols = self.ncols() + other.ncols();
 
-        let mut m = Matrix::new((nrows, cols));
+        let mut m = Matrix::new((nrows, ncols));
         for r in 0..nrows {
-            for c in 0..cols {
+            for c in 0..ncols {
                 m[(r, c)] = if r < self.nrows() {
-                    if c < self.cols() {
+                    if c < self.ncols() {
                         self[(r, c)]
                     } else {
                         0
                     }
                 } else {
-                    if c < self.cols() {
+                    if c < self.ncols() {
                         0
                     } else {
-                        other[(r - self.nrows(), c - self.cols())]
+                        other[(r - self.nrows(), c - self.ncols())]
                     }
                 }
             }
@@ -184,14 +184,14 @@ impl Chu {
         // The column (state) of A must be final (= FINAL || UNKNOWN).
         // The column (state) of B must be initial (= INITIAL || UNKNOWN).
         let nrows = self.nrows() + other.nrows();
-        let mut cols = 0;
+        let mut ncols = 0;
 
-        for ac in 0..self.cols() {
+        for ac in 0..self.ncols() {
             if cls_a[ac] == Ordering::Duplicate {
                 continue;
             }
 
-            for bc in 0..other.cols() {
+            for bc in 0..other.ncols() {
                 if cls_b[bc] == Ordering::Duplicate {
                     continue;
                 }
@@ -199,21 +199,21 @@ impl Chu {
                 if matches!(cls_a[ac], Ordering::Unknown | Ordering::Final)
                     || matches!(cls_b[ac], Ordering::Unknown | Ordering::Initial)
                 {
-                    cols += 1;
+                    ncols += 1;
                 }
             }
         }
 
         // // Form answer, column by column
-        let mut m = Matrix::new((nrows, cols));
+        let mut m = Matrix::new((nrows, ncols));
         let (mut r, mut c) = (0, 0);
 
-        for ac in 0..self.cols() {
+        for ac in 0..self.ncols() {
             if cls_a[ac] == Ordering::Duplicate {
                 continue;
             }
 
-            for bc in 0..other.cols() {
+            for bc in 0..other.ncols() {
                 if cls_b[bc] == Ordering::Duplicate {
                     continue;
                 }
@@ -245,9 +245,9 @@ impl Chu {
     // the columns of a Chu space into the five catagories above.
 
     pub fn classify_cols(&self) -> Vec<Ordering> {
-        let mut cls = vec![Ordering::Unknown; self.cols()];
+        let mut cls = vec![Ordering::Unknown; self.ncols()];
 
-        'outer: for c in 0..self.cols() {
+        'outer: for c in 0..self.ncols() {
             cls[c] = Ordering::Unknown;
 
             for d in 0..c {
@@ -320,9 +320,9 @@ impl std::ops::Mul for Chu {
     fn mul(self, rhs: Self) -> Self::Output {
         let k = self.k.max(rhs.k);
         let nrows = self.nrows() * rhs.nrows();
-        let cols = self.cols() + rhs.cols();
+        let ncols = self.ncols() + rhs.ncols();
 
-        let mut m = Matrix::new((nrows, cols));
+        let mut m = Matrix::new((nrows, ncols));
 
         let mut r = 0;
         let mut c = 0;
@@ -333,12 +333,12 @@ impl std::ops::Mul for Chu {
             for br in 0..rhs.nrows() {
                 // Create concatination of A.matrix[ar] and B.matrix[br]
 
-                for ac in 0..self.cols() {
+                for ac in 0..self.ncols() {
                     m[(r, c)] = self[(ar, ac)];
                     c += 1;
                 }
 
-                for bc in 0..rhs.cols() {
+                for bc in 0..rhs.ncols() {
                     m[(r, c)] = self[(br, bc)];
                     c += 1;
                 }
@@ -398,7 +398,7 @@ impl Chu {
             'search: while l < h {
                 let m = (l + h) / 2;
 
-                'compare: for c in 0..self.cols() {
+                'compare: for c in 0..self.ncols() {
                     if self[(unique_rows[m], c)] == self[(r, c)] {
                         continue 'compare;
                     }
@@ -428,7 +428,7 @@ impl Chu {
     pub fn col_sort(&self, unique_cols: &mut [usize]) -> usize {
         let mut num_unique = 0;
 
-        'sort: for c in 0..self.cols() {
+        'sort: for c in 0..self.ncols() {
             let (mut l, mut h) = (0, num_unique);
 
             'search: while l < h {
@@ -476,7 +476,7 @@ impl Chu {
         // }
         // unimplemented!()
 
-        let size = self.nrows() * other.cols();
+        let size = self.nrows() * other.ncols();
         let mut transforms: Vec<Vec<i32>> = Vec::new();
         let MG = MatrixGenerator::new(other.row_tree(), self.col_tree());
 
