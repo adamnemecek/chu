@@ -1,4 +1,7 @@
-use std::fmt::Debug;
+use std::{
+    fmt::Debug,
+    iter::FromFn,
+};
 
 #[derive(PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
@@ -120,3 +123,51 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
 
 //     // fn test_
 // }
+
+// #[derive(Clone)]
+// #[stable(feature = "iter_from_fn", since = "1.34.0")]
+// pub struct FromFn<F>(F);
+
+// #[stable(feature = "iter_from_fn", since = "1.34.0")]
+// impl<T, F> Iterator for FromFn<F>
+// where
+//     F: FnMut() -> Option<T>,
+// {
+//     type Item = T;
+
+//     #[inline]
+//     fn next(&mut self) -> Option<Self::Item> {
+//         (self.0)()
+//     }
+// }
+
+struct ExactFromFn<F> {
+    len: usize,
+    i: FromFn<F>,
+}
+
+impl<T, F: FnMut() -> Option<T>> ExactFromFn<F> {
+    pub fn new(len: usize, f: F) -> Self {
+        Self {
+            len,
+            i: std::iter::from_fn(f),
+        }
+    }
+}
+
+impl<T, F: FnMut() -> Option<T>> Iterator for ExactFromFn<F> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.i.next()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (self.len, self.len.into())
+    }
+}
+
+impl<T, F: FnMut() -> Option<T>> ExactSizeIterator for ExactFromFn<F> {
+    fn len(&self) -> usize {
+        self.len
+    }
+}

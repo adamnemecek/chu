@@ -64,7 +64,7 @@ impl Chu {
         let mut t = Tree::new(self.k, self.ncols());
         for r in 0..self.nrows() {
             let line = self.data.row(r);
-            t.add_line(line, r);
+            t.add_line(line.into_iter(), r);
         }
         t
     }
@@ -73,7 +73,7 @@ impl Chu {
         let mut t = Tree::new(self.k, self.nrows());
         for c in 0..self.nrows() {
             let line = self.data.col(c);
-            t.add_line(line, c);
+            t.add_line(line.into_iter(), c);
         }
         t
     }

@@ -7,6 +7,7 @@ mod chu_target;
 mod chu_view;
 mod conformable;
 mod context;
+mod exact_from_fn;
 mod executable;
 mod execution_exception;
 mod expression;
@@ -35,6 +36,7 @@ pub mod prelude {
         chu_view::*,
         conformable::*,
         context::*,
+        exact_from_fn::*,
         executable::*,
         execution_exception::*,
         expression::*,

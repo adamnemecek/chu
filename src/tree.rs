@@ -52,7 +52,11 @@ impl Tree {
     // addLine: Inserts the given line at the given index.
     // Returns a linked list of the indexes of all other
     // lines which match the new line.
-    pub fn add_line(&mut self, line: &[usize], index: usize) -> Option<Link> {
+    pub fn add_line<'a>(
+        &mut self,
+        line: impl IntoIterator<Item = &'a usize> + ExactSizeIterator,
+        index: usize,
+    ) -> Option<Link> {
         if line.len() != self.len {
             return None;
         }
