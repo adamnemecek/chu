@@ -119,7 +119,7 @@ impl Chu {
                 }
             }
         }
-        Chu::new(k, m, false)
+        Self::new(k, m, false)
     }
 
     pub fn seq(&self, other: &Self) -> Self {
@@ -149,10 +149,35 @@ impl std::ops::Mul for Chu {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self::Output {
         let k = self.k.max(rhs.k);
-        let rows = self.shape().0 * rhs.shape().0;
-        let cols = self.shape().1 + rhs.shape().1;
+        let rows = self.rows() * rhs.rows();
+        let cols = self.cols() + rhs.cols();
 
         let mut m = Matrix::<usize>::new((rows, cols));
+
+        let mut r = 0;
+        let mut c = 0;
+        // Loop over rows of A
+
+        // for(int ar=0;ar<A.nrows;ar++)
+        for ar in 0..self.rows() {
+            for br in 0..rhs.rows() {
+                // Create concatination of A.matrix[ar] and B.matrix[br]
+
+                for ac in 0..self.cols() {
+                    m[(r, c)] = self[(ar, ac)];
+                    c += 1;
+                }
+
+                for bc in 0..rhs.cols() {
+                    m[(r, c)] = self[(br, bc)];
+                    c += 1;
+                }
+
+                r += 1;
+                c = 0;
+            }
+        }
+        // Self::new()
         unimplemented!()
     }
 }
