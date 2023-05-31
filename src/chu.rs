@@ -118,7 +118,21 @@ impl Chu {
 
         loop {
             //
-            let mg = MatrixGenerator::new(&row_tree, &row_tree);
+
+            let mut mg = MatrixGenerator::new(&row_tree, &row_tree);
+
+            while mg.next() {
+                let mut diag = vec![0; self.ncols()];
+
+                for i in 0..self.ncols() {
+                    //
+                    // datum
+                    let row_index = mg.row_link(i).unwrap();
+                    // result_ro
+                }
+                //
+            }
+            //
         }
 
         unimplemented!()
@@ -232,7 +246,8 @@ impl Chu {
 
         // // Form answer, column by column
         let mut m = Matrix::new((nrows, ncols));
-        let (mut r, mut c) = (0, 0);
+        let mut r = 0;
+        let mut c = 0;
 
         for ac in 0..self.ncols() {
             if cls_a[ac] == Ordering::Duplicate {
@@ -487,7 +502,7 @@ impl Chu {
         num_unique
     }
 
-    pub fn implication(&self, other: Self) -> Self {
+    pub fn implication(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
         // let size = self.rows() * other.cols();
 

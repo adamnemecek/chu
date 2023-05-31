@@ -76,6 +76,16 @@ impl<'a> MatrixGenerator<'a> {
         self.k
     }
 
+    pub fn row_link(&self, index: usize) -> Option<Link> {
+        // self.row_links[index]
+        unimplemented!()
+    }
+
+    pub fn col_link(&self, index: usize) -> Option<Link> {
+        // self.col_links[index]
+        unimplemented!()
+    }
+
     // next: Try to find the next morphism
     // If there is no such morphism, return false
     // If there is such a morphism, put lists of the
