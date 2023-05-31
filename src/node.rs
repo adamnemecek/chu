@@ -18,15 +18,15 @@ pub type Link = LinkedList<usize>;
 //  an pointer to the parent Node
 //   (representing this prefix sans last element)
 //  a branch number (the value of the last element)
-pub struct Node {
+
+struct NodeData {
     parent: Option<NodeRef>,
-    children: RefCell<Vec<NodeRef>>,
+    children: Vec<NodeRef>,
     branch: usize,
     list: Rc<RefCell<LinkedList<usize>>>,
 }
 
-impl Node {
-    //
+impl NodeData {
     pub fn new(parent: Option<NodeRef>, branch: usize) -> Self {
         Self {
             parent,
@@ -34,6 +34,15 @@ impl Node {
             branch,
             list: <_>::default(),
         }
+    }
+}
+
+pub struct Node(Rc<RefCell<NodeData>>);
+
+impl Node {
+    //
+    pub fn new(parent: Option<NodeRef>, branch: usize) -> Self {
+        Self(Rc::new(RefCell::new(NodeData::new(parent, branch))))
     }
 
     pub fn root() -> Self {
@@ -46,20 +55,25 @@ impl Node {
     }
 
     pub fn parent(&self) -> NodeRef {
-        unimplemented!()
+        self.borrow().parent.clone().unwrap()
+    }
+
+    fn borrow(&self) -> std::cell::Ref<'_, NodeData> {
+        self.0.as_ref().borrow()
     }
 
     pub fn list(&self) -> Rc<RefCell<LinkedList<usize>>> {
-        self.list.clone()
+        // self.0.clone().list.clone()
+        self.borrow().list.clone()
     }
 
     pub fn branch(&self) -> usize {
-        self.branch
+        self.borrow().branch
     }
 
     pub fn add(&mut self, datum: usize) {
-        let mut b = self.list.as_ref().borrow_mut();
-        b.push_front(datum);
+        // let mut b = self.list.as_ref().borrow_mut();
+        // b.push_front(datum);
     }
 
     pub fn grow(self: Rc<Self>, branch: usize, arity: usize) -> NodeRef {
