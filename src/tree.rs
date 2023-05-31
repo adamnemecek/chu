@@ -52,9 +52,9 @@ impl Tree {
     // addLine: Inserts the given line at the given index.
     // Returns a linked list of the indexes of all other
     // lines which match the new line.
-    pub fn add_line<'a>(
+    pub fn add_line<'a, T: std::borrow::Borrow<usize>>(
         &mut self,
-        line: impl IntoIterator<Item = &'a usize> + ExactSizeIterator,
+        line: impl Iterator<Item = T> + ExactSizeIterator,
         index: usize,
     ) -> Option<Link> {
         if line.len() != self.len {
@@ -65,7 +65,7 @@ impl Tree {
 
         for i in line {
             //
-            current = current.unwrap().grow(*i, self.arity).into();
+            current = current.unwrap().grow(*i.borrow(), self.arity).into();
         }
 
         unimplemented!()

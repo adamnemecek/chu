@@ -143,16 +143,15 @@ impl Chu {
                     future_rows.push(union);
                     future_rows.push(intersection);
                 }
-                // row_tree.add_line(row.into_iter(), result_rows.len());
-                result_rows.push(row.clone());
+                row_tree.add_line(row.iter(), result_rows.len());
+                result_rows.push(row);
             }
         }
 
-        // Self::new(2, result_rows.len(), result_rows)
-        // let mut m = Matrix::new((result_rows.len(), self.ncols()));
-
-        // Self::new(2, , standardized)
-        unimplemented!()
+        let mut m = Matrix::new((result_rows.len(), self.ncols()));
+        unimplemented!();
+        Self::new(2, m, false)
+        // unimplemented!()
     }
 
     pub fn choice(&self, other: &Self) -> Self {
