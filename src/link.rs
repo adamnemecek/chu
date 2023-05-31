@@ -1,17 +1,31 @@
 //
-pub struct Link1 {
+use std::rc::Rc;
+pub enum Link1 {
     //
-    datum: usize,
-    next: Option<std::rc::Rc<Self>>,
+    Empty,
+    Next(usize, Option<Rc<Self>>), // datum: usize,
+                                   // next: Option<std::rc::Rc<Self>>,
+}
+
+impl Clone for Link1 {
+    fn clone(&self) -> Self {
+        match self {
+            Self::Empty => Self::Empty,
+            Self::Next(v, r) => Self::Next(*v, r.clone()),
+        }
+    }
 }
 
 impl Link1 {
-    pub fn new(datum: usize, next: Option<std::rc::Rc<Self>>) -> Self {
-        Self { datum, next }
+    pub fn new(datum: usize, next: Option<Rc<Self>>) -> Self {
+        Self::Next(datum, next.clone())
     }
 
-    pub fn datum(&self) -> usize {
-        self.datum
+    pub fn datum(&self) -> Option<usize> {
+        match self {
+            Self::Empty => None,
+            Self::Next(v, _) => Some(*v),
+        }
     }
 }
 
