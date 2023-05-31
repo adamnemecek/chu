@@ -28,3 +28,19 @@ impl<T, F: FnMut() -> Option<T>> ExactSizeIterator for ExactFromFn<F> {
         self.len
     }
 }
+
+pub struct Stack<T>(Vec<T>);
+
+impl<T> Stack<T> {
+    pub fn new() -> Self {
+        Self(vec![])
+    }
+
+    pub fn push(&mut self, x: T) {
+        self.0.push(x)
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        self.0.pop()
+    }
+}
