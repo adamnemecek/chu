@@ -504,17 +504,23 @@ impl Chu {
 
     pub fn implication(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
-        // let size = self.rows() * other.cols();
+        // The "rows" of implication are Chu transforms from A to B
+        // These transforms consist of matrices that are ambigiously
+        // composed of columns of A or rows of B.  Thus the size of
+        // these rows/transforms/matrices is:
+        let size = self.nrows() * other.ncols();
 
-        // let mut mg = MatrixGenerator::new(other.row_tree(), self.col_tree());
+        let row_tree = other.row_tree();
+        let col_tree = self.col_tree();
+        let mut mg = MatrixGenerator::new(&row_tree, &col_tree);
 
-        // while mg.next() {
-        //     //
-        //     let mut num_instances = 1;
-        //     // for r in mg.nrows() {
-        //     //
-        //     // }
-        // }
+        while mg.next() {
+            //
+            //     let mut num_instances = 1;
+            //     // for r in mg.nrows() {
+            //     //
+            //     // }
+        }
         // unimplemented!()
 
         let size = self.nrows() * other.ncols();
