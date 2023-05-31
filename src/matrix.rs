@@ -29,6 +29,19 @@ impl<T: Copy + Default> Matrix<T> {
         }
     }
 
+    pub fn from_vecs(vecs: Vec<Vec<T>>) -> Self {
+        let cols = vecs[0].len();
+        let mut m = Self::new((vecs.len(), cols));
+
+        for (i, v) in vecs.iter().enumerate() {
+            // assert!(v.len() == cols);
+            //
+            // m.data[i * cols..(i * cols + cols)].copy_from_slice(&v)
+            m.set_row(i, &v)
+        }
+        m
+    }
+
     pub fn fill(&mut self, f: impl Fn((usize, usize)) -> T) {
         for i in 0..self.nrows() {
             for j in 0..self.ncols() {
@@ -69,6 +82,13 @@ impl<T: Copy + Default> Matrix<T> {
 
     pub fn row(&self, row: usize) -> &[T] {
         &self.data[self.row_range(row)]
+    }
+
+    pub fn set_row(&mut self, index: usize, data: &[T]) {
+        assert!(self.nrows() == data.len());
+        let r = self.row_range(index);
+        let s = &mut self.data[r];
+        s.copy_from_slice(data)
     }
 
     pub fn col<'a>(&self, col: usize) -> impl Iterator<Item = &T> + ExactSizeIterator {

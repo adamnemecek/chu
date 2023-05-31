@@ -143,41 +143,15 @@ impl Chu {
                     future_rows.push(union);
                     future_rows.push(intersection);
                 }
-                // while let Some(old_row) = link {
-                //
-                // }
-                //
-                // for e in result_row.iter() {
-                //     //
-                //     let mut union = vec![false; self.ncols()];
-                //     for c in 0..self.ncols() {
-                //         union[c] = row[c] == 1 || old[c] == 1;
-                //     }
-                // }
+                // row_tree.add_line(row.into_iter(), result_rows.len());
+                result_rows.push(row.clone());
             }
-            //     if !row_tree.contains(&row) {
-            //         let old_rows = result_rows.clone();
-
-            //         for old_row in old_rows {
-            //             let mut union = vec![0; self.ncols];
-            //             for c in 0..self.ncols {
-            //                 union[c] = if row[c] == 1 || old_row[c] == 1 { 1 } else { 0 };
-            //             }
-            //             future_rows.push_back(union);
-
-            //             let mut intersection = vec![0; self.ncols];
-            //             for c in 0..self.ncols {
-            //                 intersection[c] = if row[c] == 1 && old_row[c] == 1 { 1 } else { 0 };
-            //             }
-            //             future_rows.push_back(intersection);
-            //         }
-
-            //         row_tree.insert(row.clone());
-            //         result_rows.push(row);
-            //     }
         }
 
         // Self::new(2, result_rows.len(), result_rows)
+        // let mut m = Matrix::new((result_rows.len(), self.ncols()));
+
+        // Self::new(2, , standardized)
         unimplemented!()
     }
 
