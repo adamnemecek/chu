@@ -16,7 +16,7 @@ impl Tree {
         Self {
             arity,
             len,
-            root: Some(Node::new(None, 0).into()),
+            root: Some(Node::root().into()),
         }
     }
 
@@ -62,11 +62,11 @@ impl Tree {
             return None;
         }
 
-        let mut current = self.root.clone();
+        let mut current = self.root().clone();
 
         for i in line {
             //
-            current = current.unwrap().grow(*i.borrow(), self.arity).into();
+            current = current.grow(*i.borrow(), self.arity).into();
         }
 
         unimplemented!()
