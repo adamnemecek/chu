@@ -35,7 +35,7 @@ impl Tree {
     // find_line: Returns a linked list of the
     // indexes of all lines matching the given line.
     // line is trace i think
-    pub fn find_line(&self, line: &[usize]) -> Option<Link1> {
+    pub fn find_line(&self, line: &[usize]) -> Option<Link> {
         if line.len() != self.len() {
             return None;
         }
@@ -58,7 +58,7 @@ impl Tree {
         &mut self,
         line: impl Iterator<Item = T> + ExactSizeIterator,
         index: usize,
-    ) -> Option<Link1> {
+    ) -> Option<Link> {
         if line.len() != self.len {
             return None;
         }
