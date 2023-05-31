@@ -508,7 +508,6 @@ impl Chu {
         // These transforms consist of matrices that are ambigiously
         // composed of columns of A or rows of B.  Thus the size of
         // these rows/transforms/matrices is:
-        // let size = self.nrows() * other.ncols();
 
         let row_tree = other.row_tree();
         let col_tree = self.col_tree();
@@ -545,21 +544,8 @@ impl Chu {
             }
         }
 
-        // let new_nrows = transforms.len();
-        // // let mut matrix: Vec<Vec<i32>> = vec![vec![0; size]; new_nrows];
-        // let mut m = Matrix::<usize>::new((new_rows, size));
-        // for (i, transform) in transforms.iter().enumerate() {
-        //     m[i] = transform.clone();
-        // }
+        let m = Matrix::from_vecs(&transforms);
 
-        // Chu {
-        //     K,
-        //     nrows: new_nrows,
-        //     ncols: size,
-        //     matrix,
-        //     transpose: false,
-        // }
-        unimplemented!()
-        // Self::new(k, data, false)
+        Self::new(k, m, false)
     }
 }
