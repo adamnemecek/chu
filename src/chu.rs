@@ -31,7 +31,7 @@ impl Default for Ordering {
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
-    std: Option<Box<Matrix<usize>>>,
+    std: Option<Matrix<usize>>,
 }
 
 impl Chu {
@@ -84,7 +84,8 @@ impl Chu {
 
     //
     pub fn dual(&self) -> Self {
-        Self::new(self.k, self.data.transpose(), self.std.is_none())
+        let s = self.std.as_ref().map_or(false, |x| &self.data == x);
+        Self::new(self.k, self.data.transpose(), s)
     }
 
     pub fn query(&self) -> Self {
@@ -104,21 +105,26 @@ impl Chu {
     }
 
     fn query2(&self) -> Self {
-        let mut result_rows: Vec<Vec<i32>> = Vec::new();
+        // The final number of rows is unknown,
+        // so for now hold them in a Vector.
+        let mut result_rows: Vec<Vec<usize>> = Vec::new();
+        // row_tree holds the same rows as result_rows.
+        // (The purpose of the Tree is simply to make
+        // checking for duplicates faster)
         let mut row_tree = Tree::new(2, self.ncols());
         let mut future_rows = Stack::new();
 
-        // for row in 0..self.nrows() {
-        //     future_rows.push_back(row.clone());
-        // }
-
-        let zero_row = vec![0; self.ncols()];
-        future_rows.push(zero_row.clone());
-
-        let one_row = vec![0; self.ncols()];
-        for _ in 0..self.ncols() {
-            future_rows.push(one_row.clone());
+        // Put all the rows of original space on the stack
+        for row in 0..self.nrows() {
+            future_rows.push(self.data.row(row));
         }
+
+        // Don't forget the union and intersection of the empty set of rows:
+        let zero_row = vec![0; self.ncols()];
+        future_rows.push(&zero_row);
+
+        let one_row = vec![1; self.ncols()];
+        future_rows.push(&one_row);
         // future_rows.push_back(one_row.clone());
 
         while let Some(row) = future_rows.pop() {
