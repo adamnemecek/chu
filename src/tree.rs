@@ -28,8 +28,8 @@ impl Tree {
         self.len
     }
 
-    pub fn root(&self) -> Option<NodeRef> {
-        self.root.clone()
+    pub fn root(&self) -> NodeRef {
+        self.root.clone().unwrap()
     }
 
     // find_line: Returns a linked list of the
