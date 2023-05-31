@@ -1,8 +1,11 @@
 use std::collections::LinkedList;
 
 pub type NodeRef = std::rc::Rc<Node>;
-use std::cell::RefCell;
-use std::rc::Rc;
+
+use std::{
+    cell::RefCell,
+    rc::Rc,
+};
 
 pub type Link = LinkedList<usize>;
 // use crate::prelude::Link1;
@@ -17,7 +20,7 @@ pub type Link = LinkedList<usize>;
 //  a branch number (the value of the last element)
 pub struct Node {
     parent: Option<NodeRef>,
-    children: Vec<NodeRef>,
+    children: RefCell<Vec<NodeRef>>,
     branch: usize,
     list: Rc<RefCell<LinkedList<usize>>>,
 }
@@ -27,7 +30,7 @@ impl Node {
     pub fn new(parent: Option<NodeRef>, branch: usize) -> Self {
         Self {
             parent,
-            children: vec![],
+            children: <_>::default(),
             branch,
             list: <_>::default(),
         }
@@ -38,7 +41,8 @@ impl Node {
     }
 
     pub fn child(&self, branch: usize) -> Option<NodeRef> {
-        self.children.get(branch).cloned()
+        // self.children.get(branch).cloned()
+        unimplemented!()
     }
 
     pub fn parent(&self) -> NodeRef {
@@ -58,8 +62,13 @@ impl Node {
         b.push_front(datum);
     }
 
-    pub fn grow(&self, branch: usize, arity: usize) -> NodeRef {
+    pub fn grow(self: Rc<Self>, branch: usize, arity: usize) -> NodeRef {
+        let n = Rc::new(Self::new(self.clone().into(), branch));
+        // self.children[branch] = n.clone();
+
+        n
+
         //
-        unimplemented!()
+        // unimplemented!()
     }
 }
