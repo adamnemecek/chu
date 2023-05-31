@@ -131,21 +131,22 @@ impl Chu {
         future_rows.push(one_row);
 
         while let Some(row) = future_rows.pop() {
-            if row_tree.find_line(&row).is_none() {
-                for old_row in &result_rows {
-                    let mut union = vec![0usize; self.ncols()];
-                    let mut intersection = vec![0usize; self.ncols()];
+            if row_tree.find_line(&row).is_some() {
+                continue;
+            };
+            for old_row in &result_rows {
+                let mut union = vec![0usize; self.ncols()];
+                let mut intersection = vec![0usize; self.ncols()];
 
-                    for c in 0..self.ncols() {
-                        union[c] = (row[c] == 1 || old_row[c] == 1).into();
-                        intersection[c] = (row[c] == 1 && old_row[c] == 1).into();
-                    }
-                    future_rows.push(union);
-                    future_rows.push(intersection);
+                for c in 0..self.ncols() {
+                    union[c] = (row[c] == 1 || old_row[c] == 1).into();
+                    intersection[c] = (row[c] == 1 && old_row[c] == 1).into();
                 }
-                row_tree.add_line(row.iter(), result_rows.len());
-                result_rows.push(row);
+                future_rows.push(union);
+                future_rows.push(intersection);
             }
+            row_tree.add_line(row.iter(), result_rows.len());
+            result_rows.push(row);
         }
 
         let mut m = Matrix::new((result_rows.len(), self.ncols()));
