@@ -508,61 +508,40 @@ impl Chu {
         // These transforms consist of matrices that are ambigiously
         // composed of columns of A or rows of B.  Thus the size of
         // these rows/transforms/matrices is:
-        let size = self.nrows() * other.ncols();
+        // let size = self.nrows() * other.ncols();
 
         let row_tree = other.row_tree();
         let col_tree = self.col_tree();
         let mut mg = MatrixGenerator::new(&row_tree, &col_tree);
 
-        while mg.next() {
-            //
-            let mut num_instances = 1;
-
-            for r in 0..mg.nrows() {
-                //
-            }
-        }
-        // unimplemented!()
-
         let size = self.nrows() * other.ncols();
         let mut transforms: Vec<Vec<i32>> = vec![];
-        let MG = MatrixGenerator::new(&other.row_tree(), &self.col_tree());
 
-        // while MG.next() {
-        //     let mut num_instances = 1;
-        //     for r in 0..MG.nrows() {
-        //         let mut l = MG.row_links[r];
-        //         let mut length = 0;
-        //         while let Some(next_l) = l.next() {
-        //             l = next_l;
-        //             length += 1;
-        //         }
-        //         num_instances *= length;
-        //     }
-        //     for c in 0..MG.ncols() {
-        //         let mut l = MG.col_links[c];
-        //         let mut length = 0;
-        //         while let Some(next_l) = l.next() {
-        //             l = next_l;
-        //             length += 1;
-        //         }
-        //         num_instances *= length;
-        //     }
+        while mg.next() {
+            let mut num_instances = 1;
+            for r in 0..mg.nrows() {
+                let l = mg.row_link(r).unwrap();
+                num_instances *= l.iter().count();
+            }
+            for c in 0..mg.ncols() {
+                let l = mg.col_link(c).unwrap();
+                num_instances *= l.iter().count();
+            }
 
-        //     let mut transform: Vec<i32> = vec![0; size];
-        //     for r in 0..MG.rows() {
-        //         for c in 0..MG.cols() {
-        //             let row_index = MG.row_links[r].datum();
-        //             let row = B.matrix[row_index];
-        //             let entry = row[c];
-        //             transform[r * MG.cols() + c] = entry;
-        //         }
-        //     }
+            //     let mut transform: Vec<i32> = vec![0; size];
+            //     for r in 0..MG.rows() {
+            //         for c in 0..MG.cols() {
+            //             let row_index = MG.row_links[r].datum();
+            //             let row = B.matrix[row_index];
+            //             let entry = row[c];
+            //             transform[r * MG.cols() + c] = entry;
+            //         }
+            //     }
 
-        //     for _ in 0..num_instances {
-        //         transforms.push(transform.clone());
-        //     }
-        // }
+            //     for _ in 0..num_instances {
+            //         transforms.push(transform.clone());
+            //     }
+        }
 
         // let new_nrows = transforms.len();
         // // let mut matrix: Vec<Vec<i32>> = vec![vec![0; size]; new_nrows];
