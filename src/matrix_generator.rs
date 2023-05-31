@@ -7,11 +7,11 @@ use crate::prelude::*;
 // produces a representation of a new matrix.
 //
 // #[derive(Debug)]
-pub struct MatrixGenerator {
+pub struct MatrixGenerator<'a> {
     // prefix tree of rows
-    row_tree: Tree,
+    row_tree: &'a Tree,
     // prefix tree of columns
-    col_tree: Tree,
+    col_tree: &'a Tree,
     // shape: (usize, usize),
     rows: usize,
     cols: usize,
@@ -43,10 +43,10 @@ pub struct MatrixGenerator {
     col_links: Vec<Option<Link>>,
 }
 
-impl MatrixGenerator {
+impl<'a> MatrixGenerator<'a> {
     //
 
-    pub fn new(row_tree: &Tree, col_tree: &Tree) -> Self {
+    pub fn new(row_tree: &'a Tree, col_tree: &'a Tree) -> Self {
         let rows = col_tree.len();
         let cols = row_tree.len();
 
@@ -56,10 +56,8 @@ impl MatrixGenerator {
             k: row_tree.arity(),
             row_nodes: vec![row_tree.root().unwrap(); rows],
             col_nodes: vec![col_tree.root().unwrap(); cols],
-
-            row_tree: row_tree.clone(),
-            col_tree: col_tree.clone(),
-
+            row_tree,
+            col_tree,
             current_row: 0,
             current_col: 0,
             current_branch: 0,
