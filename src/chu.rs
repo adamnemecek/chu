@@ -516,10 +516,11 @@ impl Chu {
 
         while mg.next() {
             //
-            //     let mut num_instances = 1;
-            //     // for r in mg.nrows() {
-            //     //
-            //     // }
+            let mut num_instances = 1;
+
+            for r in 0..mg.nrows() {
+                //
+            }
         }
         // unimplemented!()
 

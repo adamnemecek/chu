@@ -13,8 +13,8 @@ pub struct MatrixGenerator<'a> {
     // prefix tree of columns
     col_tree: &'a Tree,
     // shape: (usize, usize),
-    rows: usize,
-    cols: usize,
+    nrows: usize,
+    ncols: usize,
 
     k: usize,
 
@@ -47,23 +47,23 @@ impl<'a> MatrixGenerator<'a> {
     //
 
     pub fn new(row_tree: &'a Tree, col_tree: &'a Tree) -> Self {
-        let rows = col_tree.len();
-        let cols = row_tree.len();
+        let nrows = col_tree.len();
+        let ncols = row_tree.len();
 
         Self {
-            rows,
-            cols,
+            nrows,
+            ncols,
             k: row_tree.arity(),
-            row_nodes: vec![row_tree.root(); rows],
-            col_nodes: vec![col_tree.root(); cols],
+            row_nodes: vec![row_tree.root(); nrows],
+            col_nodes: vec![col_tree.root(); ncols],
             row_tree,
             col_tree,
             current_row: 0,
             current_col: 0,
             current_branch: 0,
             done: false,
-            row_links: vec![None; rows],
-            col_links: vec![None; cols],
+            row_links: vec![None; nrows],
+            col_links: vec![None; ncols],
         }
     }
 
@@ -74,6 +74,14 @@ impl<'a> MatrixGenerator<'a> {
 
     pub fn k(&self) -> usize {
         self.k
+    }
+
+    pub fn nrows(&self) -> usize {
+        self.nrows
+    }
+
+    pub fn ncols(&self) -> usize {
+        self.ncols
     }
 
     pub fn row_link(&self, index: usize) -> Option<Link> {
@@ -110,7 +118,7 @@ impl<'a> MatrixGenerator<'a> {
         // Outer loop: drive search forward, extending matrix,
         // check for when we go out of bounds.
 
-        'outer: while self.current_row < self.rows && self.current_col < self.cols {
+        'outer: while self.current_row < self.nrows && self.current_col < self.ncols {
             // Inner loop: go forward one step.
             // Back up as many cells as needed before taking a forward step.
             loop {
@@ -137,11 +145,11 @@ impl<'a> MatrixGenerator<'a> {
 
         // If we get here, the search went out of bounds.
         // Thus we have a matrix to record.
-        for r in 0..self.rows {
+        for r in 0..self.nrows {
             //
             self.row_links[r] = Some(self.row_nodes[r].link().clone());
         }
-        for c in 0..self.cols {
+        for c in 0..self.ncols {
             //
             self.col_links[c] = Some(self.col_nodes[c].link().clone());
         }
@@ -168,7 +176,7 @@ impl<'a> MatrixGenerator<'a> {
             //  then go to the end of the previous column.
 
             if self.current_row == self.current_col + 1 {
-                self.current_row = self.rows - 1;
+                self.current_row = self.nrows - 1;
             }
         } else {
             // Shrink a column upwards
@@ -178,7 +186,7 @@ impl<'a> MatrixGenerator<'a> {
             //  then go to the end of the previous row.
 
             if self.current_row == self.current_col {
-                self.current_col = self.cols - 1;
+                self.current_col = self.ncols - 1;
             }
         }
 
@@ -210,7 +218,7 @@ impl<'a> MatrixGenerator<'a> {
 
             // If the row is entirely full,
             //  then go to the start of the next column.
-            if self.current_col == self.cols {
+            if self.current_col == self.ncols {
                 self.current_col = self.current_row;
                 self.current_row = self.current_col + 1;
             }
@@ -219,7 +227,7 @@ impl<'a> MatrixGenerator<'a> {
 
             // If the column is entirely full,
             //  then go to the start of the next row.
-            if self.current_row == self.rows {
+            if self.current_row == self.nrows {
                 self.current_row = self.current_col + 1;
                 self.current_col = self.current_row;
             }
