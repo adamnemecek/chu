@@ -141,7 +141,7 @@ impl Chu {
     fn query2(&self) -> Self {
         // The final number of rows is unknown,
         // so for now hold them in a Vector.
-        let mut result_rows: Vec<Vec<usize>> = Vec::new();
+        let mut result_rows: Vec<Vec<usize>> = vec![];
         // row_tree holds the same rows as result_rows.
         // (The purpose of the Tree is simply to make
         // checking for duplicates faster)
@@ -179,10 +179,10 @@ impl Chu {
             result_rows.push(row);
         }
 
-        let mut m = Matrix::new((result_rows.len(), self.ncols()));
-        unimplemented!();
+        // let mut m = Matrix::new((result_rows.len(), self.ncols()));
+        let m = Matrix::from_vecs(&result_rows);
+        assert!(m.shape() == (result_rows.len(), self.ncols()));
         Self::new(2, m, false)
-        // unimplemented!()
     }
 
     pub fn choice(&self, other: &Self) -> Self {
@@ -525,7 +525,7 @@ impl Chu {
         // unimplemented!()
 
         let size = self.nrows() * other.ncols();
-        let mut transforms: Vec<Vec<i32>> = Vec::new();
+        let mut transforms: Vec<Vec<i32>> = vec![];
         let MG = MatrixGenerator::new(&other.row_tree(), &self.col_tree());
 
         // while MG.next() {

@@ -29,7 +29,7 @@ impl<T: Copy + Default> Matrix<T> {
         }
     }
 
-    pub fn from_vecs(vecs: Vec<Vec<T>>) -> Self {
+    pub fn from_vecs(vecs: &Vec<Vec<T>>) -> Self {
         let cols = vecs[0].len();
         let mut m = Self::new((vecs.len(), cols));
 
