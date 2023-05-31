@@ -1,6 +1,7 @@
 use std::collections::LinkedList;
 
 pub type NodeRef = std::rc::Rc<Node>;
+use std::cell::RefCell;
 use std::rc::Rc;
 
 pub type Link = LinkedList<usize>;
@@ -18,7 +19,7 @@ pub struct Node {
     parent: Option<NodeRef>,
     children: Vec<NodeRef>,
     branch: usize,
-    list: Rc<LinkedList<usize>>,
+    list: Rc<RefCell<LinkedList<usize>>>,
 }
 
 impl Node {
@@ -28,7 +29,7 @@ impl Node {
             parent,
             children: vec![],
             branch,
-            list: LinkedList::new().into(),
+            list: <_>::default(),
         }
     }
 
@@ -44,7 +45,7 @@ impl Node {
         unimplemented!()
     }
 
-    pub fn list(&self) -> Rc<LinkedList<usize>> {
+    pub fn list(&self) -> Rc<RefCell<LinkedList<usize>>> {
         self.list.clone()
     }
 
@@ -52,8 +53,9 @@ impl Node {
         self.branch
     }
 
-    pub fn add(&self, datum: usize) {
-        unimplemented!()
+    pub fn add(&mut self, datum: usize) {
+        let mut b = self.list.as_ref().borrow_mut();
+        b.push_front(datum);
     }
 
     pub fn grow(&self, branch: usize, arity: usize) -> NodeRef {

@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use std::cell::RefCell;
 use std::rc::Rc;
 //
 // Generates all matrixes whose rows and columns are taken
@@ -40,8 +41,8 @@ pub struct MatrixGenerator<'a> {
     // to lists of indexes of lines that form the matrix.)
     // After a successful call to next(), the caller
     // can examine these arrays to extract the matrix.
-    row_links: Vec<Option<Rc<Link>>>,
-    col_links: Vec<Option<Rc<Link>>>,
+    row_links: Vec<Option<Rc<RefCell<Link>>>>,
+    col_links: Vec<Option<Rc<RefCell<Link>>>>,
 }
 
 impl<'a> MatrixGenerator<'a> {
