@@ -67,17 +67,15 @@ impl Chu {
     pub fn row_tree(&self) -> Tree {
         let mut t = Tree::new(self.k, self.ncols());
         for r in 0..self.nrows() {
-            let line = self.data.row(r);
-            t.add_line(line.into_iter(), r);
+            t.add_line(self.row(r).iter(), r);
         }
         t
     }
 
     pub fn col_tree(&self) -> Tree {
         let mut t = Tree::new(self.k, self.nrows());
-        for c in 0..self.nrows() {
-            let line = self.data.col(c);
-            t.add_line(line, c);
+        for c in 0..self.ncols() {
+            t.add_line(self.data.col(c), c);
         }
         t
     }
@@ -348,7 +346,8 @@ impl Conformable for Chu {
     fn conform(&self, ctx: Context) -> Self {
         if ctx.standardization {
             // self.
-            self.standardsize()
+            // self.standardize()
+            unimplemented!()
         } else {
             // self
             unimplemented!()
@@ -400,8 +399,24 @@ impl std::ops::Index<(usize, usize)> for Chu {
 }
 
 impl Chu {
-    pub fn standardsize(&self) -> Self {
-        unimplemented!()
+    pub fn standardize(&mut self) {
+        if self.std.is_some() {
+            return;
+        }
+
+        let mut unique_rows = vec![0; self.nrows()];
+        let mut unique_cols = vec![0; self.ncols()];
+
+        let new_nrows = self.row_sort(&mut unique_rows);
+        let new_ncols = self.col_sort(&mut unique_cols);
+
+        if self.shape() == (new_nrows, new_ncols) {
+            return;
+        }
+
+        self.std = Some(Matrix::new_with_fill((new_nrows, new_ncols), |(i, j)| {
+            self[(unique_rows[i], unique_cols[j])]
+        }));
     }
 
     // None == incomparable
