@@ -515,7 +515,7 @@ impl Chu {
         let mut mg = MatrixGenerator::new(&row_tree, &col_tree);
 
         let size = self.nrows() * other.ncols();
-        let mut transforms: Vec<Vec<i32>> = vec![];
+        let mut transforms: Vec<Vec<usize>> = vec![];
 
         while mg.next() {
             let mut num_instances = 1;
@@ -528,19 +528,21 @@ impl Chu {
                 num_instances *= l.iter().count();
             }
 
-            //     let mut transform: Vec<i32> = vec![0; size];
-            //     for r in 0..MG.rows() {
-            //         for c in 0..MG.cols() {
-            //             let row_index = MG.row_links[r].datum();
-            //             let row = B.matrix[row_index];
-            //             let entry = row[c];
-            //             transform[r * MG.cols() + c] = entry;
-            //         }
-            //     }
+            let mut transform: Vec<usize> = vec![0; size];
 
-            //     for _ in 0..num_instances {
-            //         transforms.push(transform.clone());
-            //     }
+            for r in 0..mg.nrows() {
+                for c in 0..mg.ncols() {
+                    let row_index = unimplemented!();
+                    // let row_index = mg.row_link(r).unwrap().datum();
+                    let row = other.row(row_index);
+                    let entry = row[c];
+                    transform[r * mg.ncols() + c] = entry;
+                }
+            }
+
+            for _ in 0..num_instances {
+                transforms.push(transform.clone());
+            }
         }
 
         // let new_nrows = transforms.len();
