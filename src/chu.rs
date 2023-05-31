@@ -56,6 +56,10 @@ impl Chu {
         self.shape().0
     }
 
+    pub fn row(&self, index: usize) -> &[usize] {
+        self.data.row(index)
+    }
+
     pub fn ncols(&self) -> usize {
         self.shape().1
     }
@@ -116,19 +120,32 @@ impl Chu {
 
         // Put all the rows of original space on the stack
         for row in 0..self.nrows() {
-            future_rows.push(self.data.row(row));
+            future_rows.push(self.row(row).to_vec());
         }
 
         // Don't forget the union and intersection of the empty set of rows:
-        let zero_row = vec![0; self.ncols()];
-        future_rows.push(&zero_row);
+        let zero_row = vec![0usize; self.ncols()];
+        future_rows.push(zero_row);
 
-        let one_row = vec![1; self.ncols()];
-        future_rows.push(&one_row);
-        // future_rows.push_back(one_row.clone());
+        let one_row = vec![1usize; self.ncols()];
+        future_rows.push(one_row);
 
         while let Some(row) = future_rows.pop() {
-            if let Some(link) = row_tree.find_line(&row) {
+            if row_tree.find_line(&row).is_none() {
+                for old_row in &result_rows {
+                    let mut union = vec![0usize; self.ncols()];
+                    let mut intersection = vec![0usize; self.ncols()];
+
+                    for c in 0..self.ncols() {
+                        union[c] = (row[c] == 1 || old_row[c] == 1).into();
+                        intersection[c] = (row[c] == 1 && old_row[c] == 1).into();
+                    }
+                    future_rows.push(union);
+                    future_rows.push(intersection);
+                }
+                // while let Some(old_row) = link {
+                //
+                // }
                 //
                 // for e in result_row.iter() {
                 //     //
