@@ -14,3 +14,17 @@ impl Link1 {
         self.datum
     }
 }
+
+pub trait Fill<T> {
+    fn fill(count: usize, f: impl Fn() -> T) -> Self;
+}
+
+impl<T> Fill<T> for Vec<T> {
+    fn fill(count: usize, f: impl Fn() -> T) -> Self {
+        let mut self_ = Self::with_capacity(count);
+        for _ in 0..count {
+            self_.push(f());
+        }
+        self_
+    }
+}

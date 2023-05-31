@@ -39,8 +39,8 @@ pub struct MatrixGenerator<'a> {
     // to lists of indexes of lines that form the matrix.)
     // After a successful call to next(), the caller
     // can examine these arrays to extract the matrix.
-    row_links: Vec<Option<Link>>,
-    col_links: Vec<Option<Link>>,
+    row_links: Vec<Option<Link1>>,
+    col_links: Vec<Option<Link1>>,
 }
 
 impl<'a> MatrixGenerator<'a> {
@@ -62,8 +62,10 @@ impl<'a> MatrixGenerator<'a> {
             current_col: 0,
             current_branch: 0,
             done: false,
-            row_links: vec![None; nrows],
-            col_links: vec![None; ncols],
+            // row_links: vec![None; nrows],
+            row_links: Vec::fill(nrows, || None),
+            // col_links: vec![None; ncols],
+            col_links: Vec::fill(ncols, || None),
         }
     }
 
@@ -84,12 +86,12 @@ impl<'a> MatrixGenerator<'a> {
         self.ncols
     }
 
-    pub fn row_link(&self, index: usize) -> Option<Link> {
+    pub fn row_link(&self, index: usize) -> Option<Link1> {
         // self.row_links[index]
         unimplemented!()
     }
 
-    pub fn col_link(&self, index: usize) -> Option<Link> {
+    pub fn col_link(&self, index: usize) -> Option<Link1> {
         // self.col_links[index]
         unimplemented!()
     }

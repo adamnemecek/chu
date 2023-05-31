@@ -1,8 +1,9 @@
-use std::collections::LinkedList;
+// use std::collections::LinkedList;
 
 pub type NodeRef = std::rc::Rc<Node>;
 
-pub type Link = LinkedList<usize>;
+// pub type Link = LinkedList<usize>;
+use crate::prelude::Link1;
 
 // A Node (of a Tree) represents a given prefix in a set of lines.
 // The children of a node are the possible extensions of that prefix.
@@ -16,7 +17,7 @@ pub struct Node {
     parent: Option<NodeRef>,
     children: Vec<NodeRef>,
     branch: usize,
-    link: Link,
+    link: Option<Link1>,
 }
 
 impl Node {
@@ -26,7 +27,7 @@ impl Node {
             parent,
             children: vec![],
             branch,
-            link: Link::new(),
+            link: None,
         }
     }
 
