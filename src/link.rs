@@ -2,29 +2,39 @@
 use std::rc::Rc;
 pub enum Link1 {
     //
-    Empty,
-    Next(usize, Option<Rc<Self>>), // datum: usize,
+    None,
+    Some(usize, Option<Rc<Self>>), // datum: usize,
                                    // next: Option<std::rc::Rc<Self>>,
 }
 
 impl Clone for Link1 {
     fn clone(&self) -> Self {
         match self {
-            Self::Empty => Self::Empty,
-            Self::Next(v, r) => Self::Next(*v, r.clone()),
+            Self::None => Self::None,
+            Self::Some(v, r) => Self::Some(*v, r.clone()),
         }
     }
 }
 
 impl Link1 {
     pub fn new(datum: usize, next: Option<Rc<Self>>) -> Self {
-        Self::Next(datum, next.clone())
+        Self::Some(datum, next.clone())
     }
 
     pub fn datum(&self) -> Option<usize> {
         match self {
-            Self::Empty => None,
-            Self::Next(v, _) => Some(*v),
+            Self::None => None,
+            Self::Some(v, _) => Some(*v),
+        }
+    }
+}
+
+impl Iterator for Link1 {
+    type Item = Rc<Self>;
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            Self::None => None,
+            Self::Some(v, n) => n.clone(),
         }
     }
 }
