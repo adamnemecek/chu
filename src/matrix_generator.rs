@@ -46,7 +46,7 @@ pub struct MatrixGenerator {
 impl MatrixGenerator {
     //
 
-    pub fn new(row_tree: Tree, col_tree: Tree) -> Self {
+    pub fn new(row_tree: &Tree, col_tree: &Tree) -> Self {
         let rows = col_tree.len();
         let cols = row_tree.len();
 
@@ -57,8 +57,8 @@ impl MatrixGenerator {
             row_nodes: vec![row_tree.root().unwrap(); rows],
             col_nodes: vec![col_tree.root().unwrap(); cols],
 
-            row_tree,
-            col_tree,
+            row_tree: row_tree.clone(),
+            col_tree: col_tree.clone(),
 
             current_row: 0,
             current_col: 0,

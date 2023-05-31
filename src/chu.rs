@@ -92,17 +92,33 @@ impl Chu {
         Self::new(self.k, self.data.transpose(), s)
     }
 
+    // query: The rows of `A` are closed under the following operation:
+    // Form a square matrix whose rows and columns are rows of A, and
+    // build a new row from the diagonal.  The implementation below
+    // simply performs this operation repeatedly until there is nothing
+    // new generated.
     pub fn query(&self) -> Self {
         if self.k == 2 {
             return self.query2();
         }
 
-        // let row =
-
+        // The final number of rows is unknown,
+        // so for now hold them in a Vector.
         let row_tree = self.row_tree();
 
         for k in 0..self.k {
             //
+            // let const_row: Vec<_> = (0..self.ncols()).collect();
+            let const_row = vec![k; self.ncols()];
+
+            if row_tree.find_line(&const_row).is_none() {
+                //
+            }
+        }
+
+        loop {
+            //
+            let mg = MatrixGenerator::new(&row_tree, &row_tree);
         }
 
         unimplemented!()
@@ -488,7 +504,7 @@ impl Chu {
 
         let size = self.nrows() * other.ncols();
         let mut transforms: Vec<Vec<i32>> = Vec::new();
-        let MG = MatrixGenerator::new(other.row_tree(), self.col_tree());
+        let MG = MatrixGenerator::new(&other.row_tree(), &self.col_tree());
 
         // while MG.next() {
         //     let mut num_instances = 1;

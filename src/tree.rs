@@ -3,6 +3,7 @@ use crate::prelude::*;
 // A tree is used to store a collection of equal-length "lines"
 // The lines are sequences of integers in the range 0..arity-1
 
+#[derive(Clone)]
 pub struct Tree {
     //
     arity: usize,
