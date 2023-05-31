@@ -13,7 +13,6 @@ pub type Link = LinkedList<usize>;
 //   (representing this prefix sans last element)
 //  a branch number (the value of the last element)
 pub struct Node {
-    //
     parent: Option<NodeRef>,
     children: Vec<NodeRef>,
     branch: usize,
@@ -36,7 +35,7 @@ impl Node {
     }
 
     pub fn child(&self, branch: usize) -> Option<NodeRef> {
-        unimplemented!()
+        self.children.get(branch).cloned()
     }
 
     pub fn parent(&self) -> NodeRef {

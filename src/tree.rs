@@ -36,18 +36,19 @@ impl Tree {
     // indexes of all lines matching the given line.
     // line is trace i think
     pub fn find_line(&self, line: &[usize]) -> Option<Link> {
-        if line.len() != self.len {
+        if line.len() != self.len() {
             return None;
         }
 
-        let mut cur = self.root.clone();
+        let mut cur = self.root();
 
         for l in line {
-            let Some(v) = &cur else { return None; };
-            cur = v.child(*l).clone().into();
+            // let Some(v) = &cur else { return None; };
+            // cur = v.child(*l).clone().into();
         }
 
-        cur.map(|x| x.link().clone())
+        // cur.map(|x| x.link().clone())
+        unimplemented!()
     }
 
     // addLine: Inserts the given line at the given index.
