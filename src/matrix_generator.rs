@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use std::rc::Rc;
 //
 // Generates all matrixes whose rows and columns are taken
 // from the prefix trees passed at construction time.
@@ -39,8 +40,8 @@ pub struct MatrixGenerator<'a> {
     // to lists of indexes of lines that form the matrix.)
     // After a successful call to next(), the caller
     // can examine these arrays to extract the matrix.
-    row_links: Vec<Option<Link>>,
-    col_links: Vec<Option<Link>>,
+    row_links: Vec<Option<Rc<Link>>>,
+    col_links: Vec<Option<Rc<Link>>>,
 }
 
 impl<'a> MatrixGenerator<'a> {
@@ -149,11 +150,11 @@ impl<'a> MatrixGenerator<'a> {
         // Thus we have a matrix to record.
         for r in 0..self.nrows {
             //
-            self.row_links[r] = Some(self.row_nodes[r].link().clone());
+            self.row_links[r] = Some(self.row_nodes[r].list());
         }
         for c in 0..self.ncols {
             //
-            self.col_links[c] = Some(self.col_nodes[c].link().clone());
+            self.col_links[c] = Some(self.col_nodes[c].list());
         }
 
         // move search one step beyond this morphism

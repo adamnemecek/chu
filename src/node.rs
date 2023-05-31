@@ -1,6 +1,7 @@
 use std::collections::LinkedList;
 
 pub type NodeRef = std::rc::Rc<Node>;
+use std::rc::Rc;
 
 pub type Link = LinkedList<usize>;
 // use crate::prelude::Link1;
@@ -17,7 +18,7 @@ pub struct Node {
     parent: Option<NodeRef>,
     children: Vec<NodeRef>,
     branch: usize,
-    link: Option<Link>,
+    list: Rc<LinkedList<usize>>,
 }
 
 impl Node {
@@ -27,7 +28,7 @@ impl Node {
             parent,
             children: vec![],
             branch,
-            link: None,
+            list: LinkedList::new().into(),
         }
     }
 
@@ -43,9 +44,8 @@ impl Node {
         unimplemented!()
     }
 
-    pub fn link(&self) -> &Link {
-        // &self.link.unwrap()
-        unimplemented!()
+    pub fn list(&self) -> Rc<LinkedList<usize>> {
+        self.list.clone()
     }
 
     pub fn branch(&self) -> usize {
