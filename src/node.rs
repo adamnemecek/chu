@@ -62,8 +62,11 @@ impl Node {
         self.0.as_ref().borrow()
     }
 
+    fn borrow_mut(&self) -> std::cell::RefMut<'_, NodeData> {
+        self.0.as_ref().borrow_mut()
+    }
+
     pub fn list(&self) -> Rc<RefCell<LinkedList<usize>>> {
-        // self.0.clone().list.clone()
         self.borrow().list.clone()
     }
 
@@ -72,17 +75,14 @@ impl Node {
     }
 
     pub fn add(&mut self, datum: usize) {
-        // let mut b = self.list.as_ref().borrow_mut();
-        // b.push_front(datum);
+        self.borrow_mut().list.borrow_mut().push_front(datum)
     }
 
     pub fn grow(self: Rc<Self>, branch: usize, arity: usize) -> NodeRef {
         let n = Rc::new(Self::new(self.clone().into(), branch));
-        // self.children[branch] = n.clone();
+
+        self.borrow_mut().children[branch] = n.clone();
 
         n
-
-        //
-        // unimplemented!()
     }
 }
