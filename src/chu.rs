@@ -457,20 +457,26 @@ impl std::ops::Index<(usize, usize)> for Chu {
 
 impl Chu {
     pub fn standardize(&mut self) {
-        if matches!(self.std, Standard::Same | Standard::Other(_)) {
+        if self.is_standard() {
             return;
         }
 
         let mut unique_rows = vec![0; self.nrows()];
         let mut unique_cols = vec![0; self.ncols()];
 
+        // new_nrows counts non-repeat rows
+        // unique_rows[] contains indexes of non-repeat rows;
+        // (Similarly for cols)
         let new_nrows = self.row_sort(&mut unique_rows);
         let new_ncols = self.col_sort(&mut unique_cols);
 
+        // Already standardized!
         if self.shape() == (new_nrows, new_ncols) {
+            self.std = Standard::Same;
             return;
         }
 
+        // Build the standardized version
         self.std = Standard::Other(Matrix::with_fill((new_nrows, new_ncols), |(i, j)| {
             self[(unique_rows[i], unique_cols[j])]
         }));
