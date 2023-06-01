@@ -94,15 +94,30 @@ impl Chu {
 
         // The final number of rows is unknown,
         // so for now hold them in a Vector.
-        let row_tree = self.row_tree();
+        let mut result_row = vec![];
 
+        for r in 0..self.nrows() {
+            result_row.push(self.row(r).to_vec());
+        }
+
+        // row_tree holds the same rows as result_rows.
+        //  (the Tree form is useful for feeding the MatrixGenerator)
+
+        let mut row_tree = self.row_tree();
+
+        let mut const_row = vec![0; self.ncols()];
+        // ?A must contain all constant rows
         for k in 0..self.k {
             //
             // let const_row: Vec<_> = (0..self.ncols()).collect();
-            let const_row = vec![k; self.ncols()];
+            // let const_row = vec![k; self.ncols()];
+            const_row.clear();
+            const_row.fill(k);
 
             if row_tree.find_line(&const_row).is_none() {
                 //
+                row_tree.add_line(const_row.iter(), result_row.len());
+                result_row.push(const_row.clone());
             }
         }
 
@@ -128,28 +143,40 @@ impl Chu {
         unimplemented!()
     }
 
+    // query2: Closes the rows of A under union and instersection.
     fn query2(&self) -> Self {
+        //
         // The final number of rows is unknown,
         // so for now hold them in a Vector.
+        //
         let mut result_rows: Vec<Vec<usize>> = vec![];
+        //
         // row_tree holds the same rows as result_rows.
         // (The purpose of the Tree is simply to make
         // checking for duplicates faster)
+        //
         let mut row_tree = Tree::new(2, self.ncols());
         let mut future_rows = Stack::new();
 
+        //
         // Put all the rows of original space on the stack
+        //
         for row in 0..self.nrows() {
             future_rows.push(self.row(row).to_vec());
         }
 
+        //
         // Don't forget the union and intersection of the empty set of rows:
+        //
         let zero_row = vec![0usize; self.ncols()];
         future_rows.push(zero_row);
 
         let one_row = vec![1usize; self.ncols()];
         future_rows.push(one_row);
 
+        //
+        // Loop until no rows remain to insert
+        //
         while let Some(row) = future_rows.pop() {
             if row_tree.find_line(&row).is_some() {
                 continue;
