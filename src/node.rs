@@ -48,7 +48,9 @@ impl Node {
     }
 
     pub fn child(&self, branch: usize) -> Option<NodeRef> {
-        self.borrow().children[branch].clone().into()
+        let c = &self.borrow().children;
+        let Some(c) = c.get(branch) else { return None };
+        c.clone().into()
     }
 
     pub fn parent(&self) -> NodeRef {
@@ -71,7 +73,7 @@ impl Node {
         self.borrow().branch
     }
 
-    pub fn add(&mut self, datum: usize) {
+    pub fn add_mut(&self, datum: usize) {
         self.borrow_mut().list.borrow_mut().push_front(datum)
     }
 

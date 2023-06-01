@@ -1,3 +1,8 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
+use std::borrow::Borrow;
+
 use crate::prelude::*;
 
 // A tree is used to store a collection of equal-length "lines"
@@ -58,7 +63,7 @@ impl Tree {
         &mut self,
         line: impl Iterator<Item = T> + ExactSizeIterator,
         index: usize,
-    ) -> Option<Link> {
+    ) -> Option<Rc<RefCell<Link>>> {
         if line.len() != self.len {
             return None;
         }
@@ -70,6 +75,7 @@ impl Tree {
             current = current.grow(*i.borrow(), self.arity).into();
         }
 
-        unimplemented!()
+        current.add_mut(index);
+        Some(current.list())
     }
 }

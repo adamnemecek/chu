@@ -1,6 +1,8 @@
 use crate::prelude::*;
-use std::cell::RefCell;
-use std::rc::Rc;
+use std::{
+    cell::RefCell,
+    rc::Rc,
+};
 //
 // Generates all matrixes whose rows and columns are taken
 // from the prefix trees passed at construction time.
