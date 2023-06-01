@@ -27,7 +27,7 @@ macro_rules! matrix {
     }
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
     pub data: Vec<T>,
@@ -167,10 +167,15 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
     }
 }
 
-fn test() {
-    let m = matrix![
-    1.0, 2.0, 3.0;
-    4.0, 5.0, 6.0;
-    7.0, 8.0, 9.0
-    ];
+mod tests {
+    #[test]
+    fn test() {
+        let m = matrix![
+            1.0, 2.0, 3.0;
+            4.0, 5.0, 6.0;
+            7.0, 8.0, 9.0
+        ];
+
+        assert_eq!(m, m.transpose().transpose());
+    }
 }
