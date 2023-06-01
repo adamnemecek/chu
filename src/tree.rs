@@ -75,7 +75,7 @@ impl Tree {
             current = current.grow(*i.borrow(), self.arity).into();
         }
 
-        current.add_mut(index);
+        current.add_datum_mut(index);
         Some(current.list())
     }
 }

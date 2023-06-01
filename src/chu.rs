@@ -102,15 +102,12 @@ impl Chu {
 
         // row_tree holds the same rows as result_rows.
         //  (the Tree form is useful for feeding the MatrixGenerator)
-
         let mut row_tree = self.row_tree();
 
         let mut const_row = vec![0; self.ncols()];
+
         // ?A must contain all constant rows
         for k in 0..self.k {
-            //
-            // let const_row: Vec<_> = (0..self.ncols()).collect();
-            // let const_row = vec![k; self.ncols()];
             const_row.clear();
             const_row.fill(k);
 
@@ -123,6 +120,7 @@ impl Chu {
 
         loop {
             //
+            // let mut future_rows = vec![];
 
             let mut mg = MatrixGenerator::new(&row_tree, &row_tree);
 
@@ -133,9 +131,10 @@ impl Chu {
                     //
                     // datum
                     let row_index = mg.row_link(i).unwrap();
+                    let datum = row_index.borrow().front();
                     // result_ro
                 }
-                //
+                // future_rows.push(diagonal);
             }
             //
         }

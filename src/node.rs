@@ -73,9 +73,15 @@ impl Node {
         self.borrow().branch
     }
 
-    pub fn add_mut(&self, datum: usize) {
+    pub fn add_datum_mut(&self, datum: usize) {
         self.borrow_mut().list.borrow_mut().push_front(datum)
     }
+
+    // pub fn datum(&self) -> usize {
+    //     // let z = self.borrow().list.borrow();
+    //     self.borrow()
+    //     0
+    // }
 
     pub fn grow(self: Rc<Self>, branch: usize, arity: usize) -> NodeRef {
         let n = Rc::new(Self::new(self.clone().into(), branch));
