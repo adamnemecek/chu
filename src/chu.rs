@@ -446,32 +446,57 @@ impl Chu {
     }
 
     pub fn row_sort(&self, unique_rows: &mut [usize]) -> usize {
+        //
+        // Record(unique_rows) and count(num_unique) all unique rows.
+        // Throw out all copies.
+        //
         let mut num_unique = 0;
 
         'sort: for r in 0..self.nrows() {
+            // Look for row r in the current set of unique rows.
+            // If row r is not a copy, insert it into the set.
+            // l,h mark bounds of possible insertion locations
+            //
             let mut l = 0;
             let mut h = num_unique;
 
             'search: while l < h {
+                //
+                // Does row unique_rows[m] match row r?
+                //
                 let m = (l + h) / 2;
 
                 'compare: for c in 0..self.ncols() {
+                    //
+                    // scan quickly for differences
+                    //
                     if self[(unique_rows[m], c)] == self[(r, c)] {
                         continue 'compare;
                     }
 
-                    h = m + if self[(unique_rows[m], c)] > self[(r, c)] {
-                        0
+                    //
+                    // row unique_rows[m] does not match row r.
+                    // narrow range and continue search.
+                    //
+                    if self[(unique_rows[m], c)] > self[(r, c)] {
+                        h = m
                     } else {
-                        1
+                        l = m + 1
                     };
 
                     continue 'search;
                 }
 
+                //
+                // If we get here, we have a match.
+                // Throw out row r
+                //
                 continue 'sort;
             }
 
+            //
+            // We have a new row.  Insert it!
+            //
             for i in (l + 1..=num_unique).rev() {
                 unique_rows[i] = unique_rows[i - 1];
             }
@@ -515,10 +540,10 @@ impl Chu {
                     // col unique_rcols[m] does not match col c.
                     // narrow range and continue search.
                     //
-                    h = m + if self[(r, unique_cols[m])] > self[(r, c)] {
-                        0
+                    if self[(r, unique_cols[m])] > self[(r, c)] {
+                        h = m
                     } else {
-                        1
+                        l = m + 1
                     };
 
                     //
@@ -546,11 +571,12 @@ impl Chu {
 
     pub fn implication(&self, other: &Self) -> Self {
         let k = self.k.max(other.k);
+        //
         // The "rows" of implication are Chu transforms from A to B
         // These transforms consist of matrices that are ambigiously
         // composed of columns of A or rows of B.  Thus the size of
         // these rows/transforms/matrices is:
-
+        //
         let row_tree = other.row_tree();
         let col_tree = self.col_tree();
         let mut mg = MatrixGenerator::new(&row_tree, &col_tree);
