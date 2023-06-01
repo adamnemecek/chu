@@ -483,32 +483,57 @@ impl Chu {
     }
 
     pub fn col_sort(&self, unique_cols: &mut [usize]) -> usize {
+        //
+        // Record (in unique_cols) and count (in num_unique) all unique cols.
+        // Throw out all copies.
+        //
         let mut num_unique = 0;
 
         'sort: for c in 0..self.ncols() {
+            //
+            // Look for col c in the current set of unique cols.
+            // If col c is not a copy, insert it into the set.
+            // l,h mark bounds of possible insertion locations
+            //
             let mut l = 0;
             let mut h = num_unique;
 
             'search: while l < h {
+                //
+                // Does col unique_cols[m] match col c?
+                //
                 let m = (l + h) / 2;
 
                 'compare: for r in 0..self.nrows() {
+                    //
+                    // scan quickly for differences
+                    //
                     if self[(r, unique_cols[m])] == self[(r, c)] {
                         continue 'compare;
                     }
-
+                    //
+                    // col unique_rcols[m] does not match col c.
+                    // narrow range and continue search.
+                    //
                     h = m + if self[(r, unique_cols[m])] > self[(r, c)] {
                         0
                     } else {
                         1
                     };
 
+                    //
+                    // If we get here, we have a match.
+                    // Throw out col c
+                    //
                     continue 'search;
                 }
 
                 continue 'sort;
             }
 
+            //
+            // We have a new col.  Insert it!
+            //
             for i in (l + 1..=num_unique).rev() {
                 unique_cols[i] = unique_cols[i - 1];
             }
@@ -566,5 +591,12 @@ impl Chu {
         let m = Matrix::from_vecs(&transforms);
 
         Self::new(k, m, false)
+    }
+}
+
+mod tests {
+    #[test]
+    fn test() {
+        //
     }
 }

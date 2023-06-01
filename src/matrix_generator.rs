@@ -139,11 +139,9 @@ impl<'a> MatrixGenerator<'a> {
         // If we get here, the search went out of bounds.
         // Thus we have a matrix to record.
         for r in 0..self.nrows {
-            //
             self.row_links[r] = Some(self.row_nodes[r].list());
         }
         for c in 0..self.ncols {
-            //
             self.col_links[c] = Some(self.col_nodes[c].list());
         }
 
@@ -237,11 +235,9 @@ mod tests {
     #[macro_use]
     use crate::matrix;
 
-    use crate::matrix::*;
-
-    use crate::prelude::Chu;
-
     use super::MatrixGenerator;
+    use crate::matrix::*;
+    use crate::prelude::Chu;
 
     #[test]
     fn test() {
