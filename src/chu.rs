@@ -640,12 +640,20 @@ impl Chu {
         // composed of columns of A or rows of B.  Thus the size of
         // these rows/transforms/matrices is:
         //
+
+        let size = self.nrows() * other.ncols();
+
+        // The number of transforms is not known in advance, so
+        // for now they will go in a variable-length Vector:
+
+        let mut transforms: Vec<Vec<usize>> = vec![];
+
+        // Build the MatrixGenerator, using prefix trees
+        // of the possible rows and columns of the matrix:
+
         let row_tree = other.row_tree();
         let col_tree = self.col_tree();
         let mut mg = MatrixGenerator::new(&row_tree, &col_tree);
-
-        let size = self.nrows() * other.ncols();
-        let mut transforms: Vec<Vec<usize>> = vec![];
 
         while mg.next() {
             let mut num_instances = 1;
