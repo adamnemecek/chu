@@ -20,23 +20,34 @@ impl Default for Ordering {
     }
 }
 
+enum Standard {
+    No,
+    Same,
+    Other(Matrix<usize>),
+}
+
+impl Standard {
+    fn is_standard(&self) -> bool {
+        matches!(self, Standard::Same | Standard::Other(_))
+    }
+}
+
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
-    std: Option<Matrix<usize>>,
+    std: Standard,
 }
 
 impl Chu {
     pub fn new(k: usize, data: Matrix<usize>, standardized: bool) -> Self {
-        let mut s = Self { k, data, std: None };
+        assert!((0..=10).contains(&k));
+        let std = if standardized {
+            Standard::Same
+        } else {
+            Standard::No
+        };
 
-        // s.std = if standardized {
-        //     // Some(Box::new(s))
-        //     Some(data.clone())
-        // } else {
-        //     None
-        // };
-        s
+        Self { k, data, std }
     }
 
     pub fn new_with_size(size: usize) -> Self {
@@ -76,17 +87,22 @@ impl Chu {
         self.data.shape()
     }
 
-    //
-    pub fn dual(&self) -> Self {
-        let s = self.std.as_ref().map_or(false, |x| &self.data == x);
-        Self::new(self.k, self.data.transpose(), s)
+    pub fn is_standard(&self) -> bool {
+        self.std.is_standard()
     }
 
+    //
+    pub fn dual(&self) -> Self {
+        Self::new(self.k, self.data.transpose(), self.is_standard())
+    }
+
+    //
     // query: The rows of `A` are closed under the following operation:
     // Form a square matrix whose rows and columns are rows of A, and
     // build a new row from the diagonal.  The implementation below
     // simply performs this operation repeatedly until there is nothing
     // new generated.
+    //
     pub fn query(&self) -> Self {
         if self.k == 2 {
             return self.query2();
@@ -438,7 +454,7 @@ impl std::ops::Index<(usize, usize)> for Chu {
 
 impl Chu {
     pub fn standardize(&mut self) {
-        if self.std.is_some() {
+        if matches!(self.std, Standard::Same | Standard::Other(_)) {
             return;
         }
 
@@ -452,7 +468,7 @@ impl Chu {
             return;
         }
 
-        self.std = Some(Matrix::with_fill((new_nrows, new_ncols), |(i, j)| {
+        self.std = Standard::Other(Matrix::with_fill((new_nrows, new_ncols), |(i, j)| {
             self[(unique_rows[i], unique_cols[j])]
         }));
     }
