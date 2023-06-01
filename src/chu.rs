@@ -54,7 +54,7 @@ impl Chu {
 
     pub fn new_with_size(size: usize) -> Self {
         let mut m = Matrix::new((1, size));
-        m.set_col(0, 0..size);
+        m.set_row(0, 0..size);
         Self::new(size, m, true)
     }
 

@@ -66,7 +66,7 @@ impl<T: Copy + Default> Matrix<T> {
             // assert!(v.len() == cols);
             //
             // m.data[i * cols..(i * cols + cols)].copy_from_slice(&v)
-            m.set_row(i, &v)
+            m.set_row(i, v.iter())
         }
         m
     }
@@ -118,18 +118,29 @@ impl<T: Copy + Default> Matrix<T> {
         ExactFromFn::new(self.nrows(), move || r.next().map(|i| &self[(i, col)]))
     }
 
-    pub fn set_row(&mut self, row_index: usize, data: &[T]) {
+    pub fn set_row<B: std::borrow::Borrow<T>>(
+        &mut self,
+        row_index: usize,
+        data: impl Iterator<Item = B> + ExactSizeIterator,
+    ) {
         assert_eq!(self.ncols(), data.len());
-        let r = self.row_range(row_index);
-        let s = &mut self.data[r];
-        s.copy_from_slice(data)
+        // let r = self.row_range(row_index);
+        // let s = &mut self.data[r];
+        // s.copy_from_slice(data)
+        for (i, e) in data.enumerate() {
+            self[(row_index, i)] = *e.borrow();
+        }
     }
 
-    pub fn set_col(&mut self, col_index: usize, data: impl Iterator<Item = T> + ExactSizeIterator) {
+    pub fn set_col<B: std::borrow::Borrow<T>>(
+        &mut self,
+        col_index: usize,
+        data: impl Iterator<Item = B> + ExactSizeIterator,
+    ) {
         assert_eq!(self.nrows(), data.len());
 
         for (i, e) in data.enumerate() {
-            self[(col_index, i)] = e;
+            self[(i, col_index)] = *e.borrow();
         }
     }
 
@@ -202,5 +213,21 @@ mod tests {
         assert_eq!(m, m.transpose().transpose());
 
         println!("{:?}", m.col(1).collect::<Vec<_>>());
+    }
+
+    #[test]
+    fn test_set_row() {
+        let mut m = matrix![
+            1.0, 2.0, 3.0, 10.0;
+            4.0, 5.0, 6.0, 20.0;
+            7.0, 8.0, 9.0, 30.0
+        ];
+
+        m.set_row(0, &vec![10.0, 10.0, 10.0, 10.0]);
+
+        m.set_col(0, vec![100.0, 100.0, 100.0].into_iter());
+
+        println!("row 0 {:?}", m.row(0));
+        println!("col 0 {:?}", m.col(0).collect::<Vec<_>>());
     }
 }
