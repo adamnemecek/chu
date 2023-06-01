@@ -15,6 +15,21 @@ use std::{
 
 use crate::prelude::ExactFromFn;
 
+#[macro_export]
+macro_rules! matrix {
+    () => {
+        {
+            // Handle the case when called with no arguments, i.e. matrix![]
+            use $crate::matrix::Matrix;
+            Matrix::new(0, 0, vec![])
+        }
+    };
+    ($( $( $x: expr ),*);*) => {
+
+        $crate::matrix::Matrix::from_arrays([ $( [ $($x),* ] ),* ])
+    }
+}
+
 #[derive(PartialEq, Eq)]
 pub struct Matrix<T: Copy + Default> {
     shape: (usize, usize),
@@ -22,6 +37,22 @@ pub struct Matrix<T: Copy + Default> {
 }
 
 impl<T: Copy + Default> Matrix<T> {
+    fn raw(shape: (usize, usize), data: Vec<T>) -> Self {
+        unimplemented!()
+    }
+
+    fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self {
+        let mut data1 = Vec::with_capacity(R * C);
+
+        for e in data {
+            data1.extend(&e[..]);
+        }
+        Self {
+            shape: (R, C),
+            data: data1,
+        }
+    }
+
     pub fn new(shape: (usize, usize)) -> Self {
         Self {
             shape,
@@ -136,4 +167,12 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
         }
         Ok(())
     }
+}
+
+fn test() {
+    let m = matrix![
+    1.0, 2.0, 3.0;
+    4.0, 5.0, 6.0;
+    7.0, 8.0, 9.0
+    ];
 }

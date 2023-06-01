@@ -232,8 +232,9 @@ impl<'a> MatrixGenerator<'a> {
 
 // #[test]
 mod tests {
-    // #[test]
-    // fn testa() {
-    //
-    // }
+    #[test]
+    fn test() {
+        //
+        // let source = Chu::new
+    }
 }
