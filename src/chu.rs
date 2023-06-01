@@ -668,12 +668,13 @@ impl Chu {
                 num_instances *= l.borrow().iter().count();
             }
 
+            // Build the current transform
             let mut transform: Vec<usize> = vec![0; size];
 
             for r in 0..mg.nrows() {
                 for c in 0..mg.ncols() {
-                    let row_index = unimplemented!();
-                    // let row_index = mg.row_link(r).unwrap().datum();
+                    // let row_index = unimplemented!();
+                    let row_index = *mg.row_link(r).unwrap().borrow().front().unwrap();
                     let row = other.row(row_index);
                     let entry = row[c];
                     transform[r * mg.ncols() + c] = entry;
@@ -706,7 +707,17 @@ mod tests {
     #[test]
     fn test_with_size() {
         let c = Chu::new_with_size(5);
+
         println!("{:?}", c);
         //
+    }
+
+    #[test]
+    fn test_implication() {
+        let c = Chu::new_with_size(5);
+        let d = c.dual();
+
+        let i = d.implication(&d);
+        println!("{:?}", c);
     }
 }
