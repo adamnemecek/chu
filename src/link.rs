@@ -77,11 +77,24 @@
 
 //
 
-pub trait Fill<T> {
+pub trait VecExt<T> {
+    fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self
+    where
+        T: Copy;
     fn fill(count: usize, f: impl Fn() -> T) -> Self;
 }
 
-impl<T> Fill<T> for Vec<T> {
+impl<T> VecExt<T> for Vec<T> {
+    fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self
+    where
+        T: Copy,
+    {
+        let mut self_ = Self::with_capacity(R * C);
+        for e in data {
+            self_.extend(e.iter());
+        }
+        self_
+    }
     fn fill(count: usize, f: impl Fn() -> T) -> Self {
         let mut self_ = Self::with_capacity(count);
         for _ in 0..count {

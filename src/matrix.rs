@@ -3,6 +3,8 @@ use std::{
     iter::FromFn,
 };
 
+use crate::link::VecExt;
+
 // pub trait Inv {
 //     fn inv(&self) -> Self;
 // }
@@ -18,14 +20,9 @@ use crate::prelude::ExactFromFn;
 #[macro_export]
 macro_rules! matrix {
     () => {
-        {
-            // Handle the case when called with no arguments, i.e. matrix![]
-            use $crate::matrix::Matrix;
-            Matrix::new(0, 0, vec![])
-        }
+        $crate::matrix::Matrix::default()
     };
     ($( $( $x: expr ),*);*) => {
-
         $crate::matrix::Matrix::from_arrays([ $( [ $($x),* ] ),* ])
     }
 }
@@ -36,20 +33,21 @@ pub struct Matrix<T: Copy + Default> {
     pub data: Vec<T>,
 }
 
+impl<T: Copy + Default> Default for Matrix<T> {
+    fn default() -> Self {
+        Self::new((0, 0))
+    }
+}
+
 impl<T: Copy + Default> Matrix<T> {
     fn raw(shape: (usize, usize), data: Vec<T>) -> Self {
         unimplemented!()
     }
 
-    fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self {
-        let mut data1 = Vec::with_capacity(R * C);
-
-        for e in data {
-            data1.extend(&e[..]);
-        }
+    pub fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self {
         Self {
             shape: (R, C),
-            data: data1,
+            data: Vec::from_arrays(data),
         }
     }
 
