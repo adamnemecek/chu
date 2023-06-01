@@ -60,9 +60,12 @@ impl<T: Copy + Default> Matrix<T> {
 
     pub fn from_vecs(vecs: &Vec<Vec<T>>) -> Self {
         let cols = vecs[0].len();
+        println!("cols {cols}");
         let mut m = Self::new((vecs.len(), cols));
 
         for (i, v) in vecs.iter().enumerate() {
+            let l = v.len();
+            println!("len {l}");
             // assert!(v.len() == cols);
             //
             // m.data[i * cols..(i * cols + cols)].copy_from_slice(&v)

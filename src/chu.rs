@@ -127,7 +127,6 @@ impl Chu {
 
         // ?A must contain all constant rows
         for k in 0..self.k {
-            const_row.clear();
             const_row.fill(k);
 
             if row_tree.find_line(&const_row).is_none() {
@@ -165,6 +164,7 @@ impl Chu {
             let mut done = true;
             for row in &future_rows {
                 if row_tree.find_line(row).is_none() {
+                    // This row is new!
                     done = false;
                     row_tree.add_line(row.iter(), result_rows.len());
                     result_rows.push(row.clone());
@@ -175,6 +175,7 @@ impl Chu {
                 break;
             }
         }
+        println!("result rows {:?}", result_rows);
 
         let m = Matrix::from_vecs(&result_rows);
 
