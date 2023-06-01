@@ -414,7 +414,7 @@ impl Chu {
             return;
         }
 
-        self.std = Some(Matrix::new_with_fill((new_nrows, new_ncols), |(i, j)| {
+        self.std = Some(Matrix::with_fill((new_nrows, new_ncols), |(i, j)| {
             self[(unique_rows[i], unique_cols[j])]
         }));
     }

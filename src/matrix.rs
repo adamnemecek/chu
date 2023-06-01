@@ -1,9 +1,11 @@
-use std::{
-    fmt::Debug,
-    iter::FromFn,
-};
-
 use crate::link::VecExt;
+use {
+    crate::prelude::ExactFromFn,
+    std::{
+        fmt::Debug,
+        iter::FromFn,
+    },
+};
 
 // pub trait Inv {
 //     fn inv(&self) -> Self;
@@ -15,22 +17,20 @@ use crate::link::VecExt;
 //     }
 // }
 
-use crate::prelude::ExactFromFn;
-
 #[macro_export]
 macro_rules! matrix {
     () => {
         $crate::matrix::Matrix::default()
     };
-    ($( $( $x: expr ),*);*) => {
+    ($( $( $x: expr ), *); *) => {
         $crate::matrix::Matrix::from_arrays([ $( [ $($x),* ] ),* ])
     }
 }
 
 #[derive(Clone, PartialEq, Eq)]
-pub struct Matrix<T: Copy + Default> {
+pub struct Matrix<T> {
     shape: (usize, usize),
-    pub data: Vec<T>,
+    data: Vec<T>,
 }
 
 impl<T: Copy + Default> Default for Matrix<T> {
@@ -79,7 +79,7 @@ impl<T: Copy + Default> Matrix<T> {
         }
     }
 
-    pub fn new_with_fill(shape: (usize, usize), f: impl Fn((usize, usize)) -> T) -> Self {
+    pub fn with_fill(shape: (usize, usize), f: impl Fn((usize, usize)) -> T) -> Self {
         let mut m = Self::new(shape);
         m.fill(f);
         m
@@ -135,7 +135,7 @@ impl<T: Copy + Default> Matrix<T> {
         //     }
         // }
         // ret
-        Self::new_with_fill((self.shape.1, self.shape.0), |(i, j)| self[(j, i)])
+        Self::with_fill((self.shape.1, self.shape.0), |(i, j)| self[(j, i)])
     }
 
     fn offset(&self, index: (usize, usize)) -> usize {
@@ -177,5 +177,7 @@ mod tests {
         ];
 
         assert_eq!(m, m.transpose().transpose());
+
+        println!("{:?}", m.col(1).collect::<Vec<_>>());
     }
 }
