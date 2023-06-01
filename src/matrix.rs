@@ -168,8 +168,23 @@ impl<T: Copy + Default + Debug> std::fmt::Debug for Matrix<T> {
 }
 
 mod tests {
+    use super::Matrix;
+
     #[test]
-    fn test() {
+    fn test_from_vecs() {
+        let m = Matrix::from_vecs(&vec![
+            vec![1.0, 2.0, 3.0],
+            vec![4.0, 5.0, 6.0],
+            vec![7.0, 8.0, 9.0],
+        ]);
+
+        assert_eq!(m, m.transpose().transpose());
+
+        println!("{:?}", m.col(1).collect::<Vec<_>>());
+    }
+
+    #[test]
+    fn test_macro() {
         let m = matrix![
             1.0, 2.0, 3.0;
             4.0, 5.0, 6.0;

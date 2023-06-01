@@ -94,10 +94,10 @@ impl Chu {
 
         // The final number of rows is unknown,
         // so for now hold them in a Vector.
-        let mut result_row = vec![];
+        let mut result_rows = vec![];
 
         for r in 0..self.nrows() {
-            result_row.push(self.row(r).to_vec());
+            result_rows.push(self.row(r).to_vec());
         }
 
         // row_tree holds the same rows as result_rows.
@@ -113,14 +113,14 @@ impl Chu {
 
             if row_tree.find_line(&const_row).is_none() {
                 //
-                row_tree.add_line(const_row.iter(), result_row.len());
-                result_row.push(const_row.clone());
+                row_tree.add_line(const_row.iter(), result_rows.len());
+                result_rows.push(const_row.clone());
             }
         }
 
         loop {
             //
-            // let mut future_rows = vec![];
+            let mut future_rows = vec![];
 
             let mut mg = MatrixGenerator::new(&row_tree, &row_tree);
 
@@ -131,15 +131,35 @@ impl Chu {
                     //
                     // datum
                     let row_index = mg.row_link(i).unwrap();
-                    let datum = row_index.borrow().front();
+                    let datum = *row_index.borrow().front().unwrap();
                     // result_ro
+                    let row = &result_rows[datum];
+                    diag[i] = row[i];
                 }
-                // future_rows.push(diagonal);
+                future_rows.push(diag);
             }
-            //
+
+            // Search future_rows for new rows.
+            // Add new rows to row_tree, result_rows.
+            // If none of the rows are new, break the loop.
+
+            let mut done = true;
+            for row in &future_rows {
+                if row_tree.find_line(row).is_none() {
+                    done = false;
+                    row_tree.add_line(row.iter(), result_rows.len());
+                    result_rows.push(row.clone());
+                }
+            }
+
+            if done {
+                break;
+            }
         }
 
-        unimplemented!()
+        let m = Matrix::from_vecs(&result_rows);
+
+        Self::new(self.k, m, false)
     }
 
     // query2: Closes the rows of A under union and instersection.
