@@ -175,7 +175,7 @@ impl Chu {
                 break;
             }
         }
-        println!("result rows {:?}", result_rows);
+        // println!("result rows {:?}", result_rows);
 
         let m = Matrix::from_vecs(&result_rows);
 
@@ -727,6 +727,10 @@ mod tests {
     #[test]
     fn test_query() {
         let c = Chu::new_with_size(5);
-        c.query();
+        let mut q = c.query();
+
+        q.standardize();
+
+        println!("{:?}", q);
     }
 }

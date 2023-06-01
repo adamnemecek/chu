@@ -65,7 +65,6 @@ impl<T: Copy + Default> Matrix<T> {
 
         for (i, v) in vecs.iter().enumerate() {
             let l = v.len();
-            println!("len {l}");
             // assert!(v.len() == cols);
             //
             // m.data[i * cols..(i * cols + cols)].copy_from_slice(&v)
