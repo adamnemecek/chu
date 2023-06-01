@@ -46,8 +46,6 @@ pub struct MatrixGenerator<'a> {
 }
 
 impl<'a> MatrixGenerator<'a> {
-    //
-
     pub fn new(row_tree: &'a Tree, col_tree: &'a Tree) -> Self {
         let nrows = col_tree.len();
         let ncols = row_tree.len();
@@ -64,17 +62,10 @@ impl<'a> MatrixGenerator<'a> {
             current_col: 0,
             current_branch: 0,
             done: false,
-            // row_links: vec![None; nrows],
             row_links: Vec::fill(nrows, || None),
-            // col_links: vec![None; ncols],
             col_links: Vec::fill(ncols, || None),
         }
     }
-
-    // pub fn shape(&self) -> (usize, usize) {
-    //     // self.shape
-    //     unimplemented!()
-    // }
 
     pub fn k(&self) -> usize {
         self.k
@@ -88,14 +79,12 @@ impl<'a> MatrixGenerator<'a> {
         self.ncols
     }
 
-    pub fn row_link(&self, index: usize) -> Option<Link> {
-        // self.row_links[index]
-        unimplemented!()
+    pub fn row_link(&self, index: usize) -> Option<Rc<RefCell<Link>>> {
+        self.row_links[index].clone()
     }
 
-    pub fn col_link(&self, index: usize) -> Option<Link> {
-        // self.col_links[index]
-        unimplemented!()
+    pub fn col_link(&self, index: usize) -> Option<Rc<RefCell<Link>>> {
+        self.col_links[index].clone()
     }
 
     // next: Try to find the next morphism

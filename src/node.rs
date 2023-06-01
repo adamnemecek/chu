@@ -1,9 +1,8 @@
-use std::collections::LinkedList;
-
 pub type NodeRef = std::rc::Rc<Node>;
 
 use std::{
     cell::RefCell,
+    collections::LinkedList,
     rc::Rc,
 };
 
@@ -40,9 +39,8 @@ impl NodeData {
 pub struct Node(Rc<RefCell<NodeData>>);
 
 impl Node {
-    //
     pub fn new(parent: Option<NodeRef>, branch: usize) -> Self {
-        Self(Rc::new(RefCell::new(NodeData::new(parent, branch))))
+        Self(Rc::new(NodeData::new(parent, branch).into()))
     }
 
     pub fn root() -> Self {
@@ -50,8 +48,7 @@ impl Node {
     }
 
     pub fn child(&self, branch: usize) -> Option<NodeRef> {
-        // self.children.get(branch).cloned()
-        unimplemented!()
+        self.borrow().children[branch].clone().into()
     }
 
     pub fn parent(&self) -> NodeRef {

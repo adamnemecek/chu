@@ -535,11 +535,11 @@ impl Chu {
             let mut num_instances = 1;
             for r in 0..mg.nrows() {
                 let l = mg.row_link(r).unwrap();
-                num_instances *= l.iter().count();
+                num_instances *= l.borrow().iter().count();
             }
             for c in 0..mg.ncols() {
                 let l = mg.col_link(c).unwrap();
-                num_instances *= l.iter().count();
+                num_instances *= l.borrow().iter().count();
             }
 
             let mut transform: Vec<usize> = vec![0; size];
