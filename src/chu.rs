@@ -1,12 +1,4 @@
-// use std::fmt::Debug;
-
 use crate::prelude::*;
-
-// enum Standardized {
-//     yes,
-//     no(Option<Box<Chu>>),
-// }
-// use std::cmp::
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Ordering {

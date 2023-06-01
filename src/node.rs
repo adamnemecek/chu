@@ -20,7 +20,7 @@ pub type Link = LinkedList<usize>;
 
 struct NodeData {
     parent: Option<NodeRef>,
-    children: Vec<NodeRef>,
+    children: Vec<Option<NodeRef>>,
     branch: usize,
     list: Rc<RefCell<LinkedList<usize>>>,
 }
@@ -78,7 +78,9 @@ impl Node {
     pub fn grow(self: Rc<Self>, branch: usize, arity: usize) -> NodeRef {
         let n = Rc::new(Self::new(self.clone().into(), branch));
 
-        self.borrow_mut().children[branch] = n.clone();
+        let mut b = self.borrow_mut();
+        b.children.resize(branch + 1, None);
+        b.children[branch] = Some(n.clone());
 
         n
     }
