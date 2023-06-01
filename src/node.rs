@@ -18,6 +18,7 @@ pub type Link = LinkedList<usize>;
 //   (representing this prefix sans last element)
 //  a branch number (the value of the last element)
 
+#[derive(Debug)]
 struct NodeData {
     parent: Option<NodeRef>,
     children: Vec<Option<NodeRef>>,
@@ -36,6 +37,7 @@ impl NodeData {
     }
 }
 
+#[derive(Debug)]
 pub struct Node(Rc<RefCell<NodeData>>);
 
 impl Node {

@@ -1,14 +1,14 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use std::borrow::Borrow;
+// use std::borrow::Borrow;
 
 use crate::prelude::*;
 
 // A tree is used to store a collection of equal-length "lines"
 // The lines are sequences of integers in the range 0..arity-1
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Tree {
     //
     arity: usize,
@@ -40,7 +40,10 @@ impl Tree {
     // find_line: Returns a linked list of the
     // indexes of all lines matching the given line.
     // line is trace i think
-    pub fn find_line(&self, line: &[usize]) -> Option<Link> {
+    pub fn find_line(
+        &self,
+        line: &[usize],
+    ) -> Option<Rc<RefCell<std::collections::LinkedList<usize>>>> {
         if line.len() != self.len() {
             return None;
         }
@@ -48,12 +51,14 @@ impl Tree {
         let mut cur = self.root();
 
         for l in line {
-            // let Some(v) = &cur else { return None; };
+            // current = current
+            let Some(v) = cur.child(*l) else { return None; };
             // cur = v.child(*l).clone().into();
+            cur = v;
         }
-
+        Some(cur.list())
         // cur.map(|x| x.link().clone())
-        unimplemented!()
+        // unimplemented!()
     }
 
     // addLine: Inserts the given line at the given index.

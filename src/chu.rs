@@ -717,8 +717,15 @@ mod tests {
         let c = Chu::new_with_size(5);
         let d = c.dual();
 
-        // let i = d.implication(&d);
+        let i = d.implication(&d);
         println!("{:?}", c);
         println!("{:?}", d);
+        println!("{:?}", i);
+    }
+
+    #[test]
+    fn test_query() {
+        let c = Chu::new_with_size(5);
+        c.query();
     }
 }

@@ -13,9 +13,10 @@ use std::{
 // #[derive(Debug)]
 pub struct MatrixGenerator<'a> {
     // prefix tree of rows
-    row_tree: &'a Tree,
+    // row_tree: &'a Tree,
     // prefix tree of columns
-    col_tree: &'a Tree,
+    // col_tree: &'a Tree,
+    ph: std::marker::PhantomData<&'a ()>,
     // shape: (usize, usize),
     nrows: usize,
     ncols: usize,
@@ -58,8 +59,9 @@ impl<'a> MatrixGenerator<'a> {
             k: row_tree.arity(),
             row_nodes: vec![row_tree.root(); nrows],
             col_nodes: vec![col_tree.root(); ncols],
-            row_tree,
-            col_tree,
+            // row_tree,
+            // col_tree,
+            ph: <_>::default(),
             current_row: 0,
             current_col: 0,
             current_branch: 0,
@@ -242,7 +244,7 @@ mod tests {
     use crate::prelude::Chu;
 
     #[test]
-    fn test() {
+    fn test_gen() {
         let source = Chu::new(
             2,
             matrix![
