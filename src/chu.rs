@@ -20,6 +20,7 @@ impl Default for Ordering {
     }
 }
 
+#[derive(Clone, PartialEq, Eq, Debug)]
 enum Standard {
     No,
     Same,
@@ -32,6 +33,7 @@ impl Standard {
     }
 }
 
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Chu {
     k: usize,
     data: Matrix<usize>,
@@ -51,7 +53,8 @@ impl Chu {
     }
 
     pub fn new_with_size(size: usize) -> Self {
-        let m = Matrix::new((1, size));
+        let mut m = Matrix::new((1, size));
+        m.set_col(0, 0..size);
         Self::new(size, m, true)
     }
 
@@ -675,8 +678,12 @@ impl Chu {
 }
 
 mod tests {
+    use crate::prelude::Chu;
+
     #[test]
-    fn test() {
+    fn test_with_size() {
+        let c = Chu::new_with_size(5);
+        println!("{:?}", c);
         //
     }
 }

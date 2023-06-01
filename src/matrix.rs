@@ -118,11 +118,19 @@ impl<T: Copy + Default> Matrix<T> {
         ExactFromFn::new(self.nrows(), move || r.next().map(|i| &self[(i, col)]))
     }
 
-    pub fn set_row(&mut self, index: usize, data: &[T]) {
-        assert!(self.nrows() == data.len());
-        let r = self.row_range(index);
+    pub fn set_row(&mut self, row_index: usize, data: &[T]) {
+        assert_eq!(self.ncols(), data.len());
+        let r = self.row_range(row_index);
         let s = &mut self.data[r];
         s.copy_from_slice(data)
+    }
+
+    pub fn set_col(&mut self, col_index: usize, data: impl Iterator<Item = T> + ExactSizeIterator) {
+        assert_eq!(self.nrows(), data.len());
+
+        for (i, e) in data.enumerate() {
+            self[(col_index, i)] = e;
+        }
     }
 
     pub fn transpose(&self) -> Self {
