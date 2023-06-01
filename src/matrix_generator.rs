@@ -235,22 +235,48 @@ mod tests {
     // #[macro_use]
     // extern chu;
     #[macro_use]
+    use crate::matrix;
+
     use crate::matrix::*;
 
     use crate::prelude::Chu;
 
+    use super::MatrixGenerator;
+
     #[test]
     fn test() {
+        let source = Chu::new(
+            2,
+            matrix![
+                0, 0, 0, 0;
+                0, 1, 0, 1;
+                0, 0, 1, 1;
+                0, 1, 1, 0
+            ],
+            false,
+        );
+
+        let target = Chu::new(
+            2,
+            matrix![
+                1, 1, 0, 0;
+                0, 1, 1, 0;
+                0, 0, 1, 1;
+                1, 0, 0, 1
+            ],
+            false,
+        );
+
+        let rt = target.row_tree();
+        let ct = target.col_tree();
+
+        let mut G = MatrixGenerator::new(&rt, &ct);
+
+        let mut i = 0;
+        while G.next() {
+            //
+            i += 1;
+        }
         //
-        // let source = Chu::new(
-        //     2,
-        //     matrix![
-        //         0, 0, 0, 0;
-        //         0, 1, 0, 1;
-        //         0, 0, 1, 1;
-        //         0, 1, 1, 0;
-        //     ],
-        //     false,
-        // );
     }
 }
