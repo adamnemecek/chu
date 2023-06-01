@@ -449,7 +449,8 @@ impl Chu {
         let mut num_unique = 0;
 
         'sort: for r in 0..self.nrows() {
-            let (mut l, mut h) = (0, num_unique);
+            let mut l = 0;
+            let mut h = num_unique;
 
             'search: while l < h {
                 let m = (l + h) / 2;
@@ -459,11 +460,11 @@ impl Chu {
                         continue 'compare;
                     }
 
-                    if self[(unique_rows[m], c)] > self[(r, c)] {
-                        h = m;
+                    h = m + if self[(unique_rows[m], c)] > self[(r, c)] {
+                        0
                     } else {
-                        l = m + 1;
-                    }
+                        1
+                    };
 
                     continue 'search;
                 }
@@ -485,7 +486,8 @@ impl Chu {
         let mut num_unique = 0;
 
         'sort: for c in 0..self.ncols() {
-            let (mut l, mut h) = (0, num_unique);
+            let mut l = 0;
+            let mut h = num_unique;
 
             'search: while l < h {
                 let m = (l + h) / 2;
@@ -495,11 +497,11 @@ impl Chu {
                         continue 'compare;
                     }
 
-                    if self[(r, unique_cols[m])] > self[(r, c)] {
-                        h = m;
+                    h = m + if self[(r, unique_cols[m])] > self[(r, c)] {
+                        0
                     } else {
-                        l = m + 1;
-                    }
+                        1
+                    };
 
                     continue 'search;
                 }
@@ -533,10 +535,12 @@ impl Chu {
 
         while mg.next() {
             let mut num_instances = 1;
+
             for r in 0..mg.nrows() {
                 let l = mg.row_link(r).unwrap();
                 num_instances *= l.borrow().iter().count();
             }
+
             for c in 0..mg.ncols() {
                 let l = mg.col_link(c).unwrap();
                 num_instances *= l.borrow().iter().count();
