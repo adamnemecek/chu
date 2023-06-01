@@ -81,6 +81,7 @@ pub trait VecExt<T> {
     fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self
     where
         T: Copy;
+
     fn fill(count: usize, f: impl Fn() -> T) -> Self;
 }
 
@@ -95,6 +96,7 @@ impl<T> VecExt<T> for Vec<T> {
         }
         self_
     }
+
     fn fill(count: usize, f: impl Fn() -> T) -> Self {
         let mut self_ = Self::with_capacity(count);
         for _ in 0..count {

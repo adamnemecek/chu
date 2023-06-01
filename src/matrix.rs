@@ -41,7 +41,7 @@ impl<T: Copy + Default> Default for Matrix<T> {
 
 impl<T: Copy + Default> Matrix<T> {
     fn raw(shape: (usize, usize), data: Vec<T>) -> Self {
-        unimplemented!()
+        Self { shape, data }
     }
 
     pub fn from_arrays<const R: usize, const C: usize>(data: [[T; C]; R]) -> Self {
@@ -113,16 +113,16 @@ impl<T: Copy + Default> Matrix<T> {
         &self.data[self.row_range(row)]
     }
 
+    pub fn col<'a>(&self, col: usize) -> impl Iterator<Item = &T> + ExactSizeIterator {
+        let mut r = 0..self.nrows();
+        ExactFromFn::new(self.nrows(), move || r.next().map(|i| &self[(i, col)]))
+    }
+
     pub fn set_row(&mut self, index: usize, data: &[T]) {
         assert!(self.nrows() == data.len());
         let r = self.row_range(index);
         let s = &mut self.data[r];
         s.copy_from_slice(data)
-    }
-
-    pub fn col<'a>(&self, col: usize) -> impl Iterator<Item = &T> + ExactSizeIterator {
-        let mut r = 0..self.nrows();
-        ExactFromFn::new(self.nrows(), move || r.next().map(|i| &self[(i, col)]))
     }
 
     pub fn transpose(&self) -> Self {

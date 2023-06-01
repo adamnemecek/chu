@@ -232,9 +232,25 @@ impl<'a> MatrixGenerator<'a> {
 
 // #[test]
 mod tests {
+    // #[macro_use]
+    // extern chu;
+    #[macro_use]
+    use crate::matrix::*;
+
+    use crate::prelude::Chu;
+
     #[test]
     fn test() {
         //
-        // let source = Chu::new
+        // let source = Chu::new(
+        //     2,
+        //     matrix![
+        //         0, 0, 0, 0;
+        //         0, 1, 0, 1;
+        //         0, 0, 1, 1;
+        //         0, 1, 1, 0;
+        //     ],
+        //     false,
+        // );
     }
 }
