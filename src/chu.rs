@@ -677,6 +677,15 @@ impl Chu {
     }
 }
 
+// impl std::fmt::Debug for Chu {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         write!(f, "Chu {{")?;
+//         write!(f, "\t")
+//         write!(f, "}}")?;
+//         Ok(())
+//     }
+// }
+
 mod tests {
     use crate::prelude::Chu;
 

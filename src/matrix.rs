@@ -124,9 +124,6 @@ impl<T: Copy + Default> Matrix<T> {
         data: impl Iterator<Item = B> + ExactSizeIterator,
     ) {
         assert_eq!(self.ncols(), data.len());
-        // let r = self.row_range(row_index);
-        // let s = &mut self.data[r];
-        // s.copy_from_slice(data)
         for (i, e) in data.enumerate() {
             self[(row_index, i)] = *e.borrow();
         }
@@ -223,7 +220,7 @@ mod tests {
             7.0, 8.0, 9.0, 30.0
         ];
 
-        m.set_row(0, &vec![10.0, 10.0, 10.0, 10.0]);
+        m.set_row(0, vec![10.0, 10.0, 10.0, 10.0].into_iter());
 
         m.set_col(0, vec![100.0, 100.0, 100.0].into_iter());
 
