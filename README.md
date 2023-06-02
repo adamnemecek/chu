@@ -1,6 +1,7 @@
 # chu
 
-This is a port of https://github.com/adamnemecek/ChuCalculator.
+This is a port of http://chu.stanford.edu/
 
 
-* line == trace
+
+<!-- * line == trace -->
