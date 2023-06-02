@@ -20,6 +20,11 @@ impl Default for Ordering {
     }
 }
 
+///
+/// No, means that it's not standardized
+/// Same means that `data` is standardized
+/// Other containes the dtandardized data
+///
 #[derive(Clone, PartialEq, Eq, Debug)]
 enum Standard {
     No,
@@ -470,6 +475,7 @@ impl Chu {
         // (Similarly for cols)
         let new_nrows = self.row_sort(&mut unique_rows);
         let new_ncols = self.col_sort(&mut unique_cols);
+        // println!("new_nrows {:?} new_ncols {:?}", new_nrows, new_ncols);
 
         // Already standardized!
         if self.shape() == (new_nrows, new_ncols) {
@@ -716,11 +722,11 @@ mod tests {
     #[test]
     fn test_implication() {
         let c = Chu::new_with_size(5);
-        let d = c.dual();
+        // let d = c.dual();
 
-        let i = d.implication(&d);
+        let i = c.implication(&c);
         println!("{:?}", c);
-        println!("{:?}", d);
+        // println!("{:?}", d);
         println!("{:?}", i);
     }
 
@@ -729,8 +735,20 @@ mod tests {
         let c = Chu::new_with_size(5);
         let mut q = c.query();
 
+        println!("{:?}", q);
         q.standardize();
 
         println!("{:?}", q);
     }
+
+    // #[test]
+    // fn test_implication() {
+    //     let c = Chu::new_with_size(5);
+    //     let mut q = c.query();
+
+    //     println!("{:?}", q);
+    //     q.standardize();
+
+    //     println!("{:?}", q);
+    // }
 }
