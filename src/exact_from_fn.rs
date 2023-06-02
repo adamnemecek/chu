@@ -1,3 +1,6 @@
+///
+/// Like from `FromFn` but with `ExactSize`
+///
 pub struct ExactFromFn<F> {
     len: usize,
     i: std::iter::FromFn<F>,
